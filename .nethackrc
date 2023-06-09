@@ -1,0 +1,7 @@
+OPTIONS=eight_bit_tty
+OPTIONS=autodig,time,lootabc
+OPTIONS=autopickup
+OPTIONS=pickup_types:$+!=?/"
+OPTIONS=pickup_burden:unencumbered
+OPTIONS=showscore,showexp
+OPTIONS=!rest_on_space,color

@@ -1,0 +1,204 @@
+# vim: filetype=zsh
+# Florian Wallners zshrc
+
+if [ `id -u` -eq 0 ]; then
+    ROOT='true'
+fi
+
+if [ -d ${HOME}/bin ]; then
+    PATH=${HOME}/bin:$PATH
+fi
+
+if [ -d "${HOME}/.local/bin" ]; then
+    PATH=${HOME}/.local/bin:${PATH}
+fi
+
+# initialize antibody
+source <(antibody init)
+
+export HISTSIZE=6144
+export SAVEHIST=4096
+export HISTFILE=$HOME/.zsh/history
+
+# keybindgs
+bindkey -e                  # emacs key bindings
+bindkey ' ' magic-space     # also do history expansion on space
+bindkey "\e[3~" delete-char # make delete work correctly
+
+# The options. Listed  here are only those that differ from the defaults.
+# They are ordered alphabetically not by subject.
+setopt ALWAYS_TO_END        # Move to end of word after completion
+setopt AUTO_CD              # If an unknown command is a directory cd into it.
+setopt BRACE_CCL            # Expand expressions in braces
+setopt COMPLETE_IN_WORD     # Don't move to end of word when completeing.
+setopt CORRECT              # Try auto correction of commands
+setopt EQUALS               # Filename expansion on right hand side of '='
+setopt HIST_IGNORE_ALL_DUPS # Remove all duplicates from the history
+setopt HIST_NO_STORE        # Don't store history in the history
+setopt HIST_REDUCE_BLANKS   # Remove all superflous blanks from history entries
+setopt SHARE_HISTORY        # History is shared between shells.
+setopt LONG_LIST_JOBS       # Display jobs in long list formats
+setopt MARK_DIRS            # Mark a generated filename as directory '/'
+setopt NUMERIC_GLOB_SORT    # Sort generated numerical file names numerical
+setopt PUSHD_TO_HOME        # empty pushd pushes '~' onto stack
+
+
+# trying to setup the editor correctly
+
+if [[ -x /usr/bin/vim || -x /usr/local/bin/vim ]] then
+    export EDITOR=vim
+else
+    # I catch myself very often typing 'vim' 'though I know its not
+    # there... So I help myself.
+
+    export EDITOR=vi
+    alias vim='vi'
+fi
+
+# enable fzf
+if [[ -v TMUX ]]; then
+    export FZF_TMUX=1
+fi
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
+export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse'
+export FZF_CTRL_T_OPTS="${FZF_DEFAULT_OPTS} --preview 'bat --style=numbers --color=always {} | head -500'"
+source /usr/share/fzf/shell/key-bindings.zsh
+# this is a bug in the fedora shipped fzf RPM
+source /usr/share/zsh/site-functions/fzf
+
+# Set up less
+export PAGER=less
+export LESS='-deFgiMRSX -P?fFile %f:stdin. ?m(%i of %m) :.line %l ?Lof %L:.?p (%p\%):.'
+export LESSCHARSET=utf-8   # Is this still necessary?
+# Format man pages for a wigth of 80 col no matter how wide the terminal
+export MANWIDTH=80
+# Use bat as manual pager
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANROFFOPT="-c"
+
+# In the process of switching to bat, but for the time beiing...
+if [ -f /usr/share/source-highlight/src-hilite-lesspipe.sh ]; then
+    LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
+fi
+
+export BAT_THEME="TwoDark"
+
+# Don't ignore leading dots when sorting.
+export LC_COLLATE="C"
+export LC_CTYPE=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+# Set up aliases
+alias mv='nocorrect mv'    # no spelling correction on mv
+alias cp='nocorrect cp'    # no spelling correction on cp
+alias mkdir='nocorrect mkdir' # no spelling correction on mkdir
+alias ll='ls -l'
+alias la='ls -a'
+alias cd..="cd .."
+alias \#='sudo'
+alias doch='sudo $(fc -ln -1)'
+alias xps='ps aucx | head -1; ps aucx | grep -i '
+alias https='http --default-scheme=https'
+alias xc='xclip -i -selection clipboard'
+
+# Completition control
+
+if [ -d "${HOME}/.zsh/completion" ]; then
+    fpath=(${HOME}/.zsh/completion/ $fpath)
+fi
+
+autoload -Uz compinit && compinit -i
+autoload -U +X bashcompinit && bashcompinit
+
+# Completion caching
+zstyle ':completion::complete:*' use-cache 1
+zstyle ':completion::complete:*' cache-path $HOME/.zsh/cache/$HOST
+
+# formatting and messages
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*:messages' format '%d'
+zstyle ':completion:*:warnings' format 'No matches for: %d'
+zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
+zstyle ':completion:*' group-name ''
+
+# match uppercase from lowercase
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+
+# activate menu selection
+zstyle ':completion:*' menu select
+
+# offer indexes before parameters in subscripts
+zstyle ':completion:*:*:-subscript-:*' tag-order indexes parameters
+
+# Don't complete backup files as executables
+zstyle ':completion:*:complete:-command-::commands' ignored-patterns '*\~'
+
+# Separate matches into groups
+zstyle ':completion:*:matches' group 'yes'
+
+# Describe options in full
+zstyle ':completion:*:options' description 'yes'
+zstyle ':completion:*:options' auto-description '%d'
+
+antibody bundle < ~/.zsh/antigen_plugins.txt
+
+if [ $(which terraform > /dev/null 2>&1) ]; then
+    complete -o nospace -C /usr/bin/terraform terraform
+fi
+
+if [ $(which kubectl > /dev/null 2>&1) ]; then
+    source <(kubectl completion zsh)
+fi
+
+if [ $(which minikube > /dev/null 2>&1) ]; then
+    source <(minikube completion zsh)
+fi
+
+if [ $(which helm > /dev/null 2>&1) ]; then
+    source <(helm completion zsh)
+fi
+
+if [ $(which k3d > /dev/null 2>&1) ]; then
+    source <(k3d completion zsh)
+fi
+
+if [ $(which stern > /dev/null 2>&1) ]; then
+    source <(stern --completion zsh)
+fi
+
+if [ -f /usr/lib64/google-cloud-sdk/completion.zsh.inc ]; then
+    source "/usr/lib64/google-cloud-sdk/completion.zsh.inc"
+fi
+
+if [ -f $HOME/.ocd.sh ]; then
+    source "$HOME/.ocd.sh"
+fi
+
+# Magic with Window-Titles
+
+case $TERM in
+    xterm*|dtterm)
+        precmd ()  {print -Pn "\e]0;%n@%m: %~\a"}
+        preexec () {print -Pn "\e]0;%n@%m: [$1]\a"}
+    ;;
+    screen*)
+        precmd()  {print -Pn "\ek %n@%m: %~\e\\"}
+        preexec() {print -Pn "\ek %n@%m: [$1]\e\\"}
+    ;;
+esac
+
+eval "$(direnv hook zsh)"
+
+for file in ${SOURCE_FILES[@]}; do
+    if [ -f $file ]; then
+        source $file
+    fi
+done
+# Removing duplicate entries from $PATH
+typeset -U PATH
+
+system=""
+ROOT=""
+MACOS=""
