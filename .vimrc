@@ -18,7 +18,7 @@ function PackInit() abort
     call minpac#add('tpope/vim-speeddating')   " use <c-a>/<c-x> on dates
     call minpac#add('junegunn/fzf.vim')        " use fzf for file management
     call minpac#add('preservim/nerdtree')      " install NERDTree
-    call minpac#add('vimpostor/vim-lumen')
+"    call minpac#add('vimpostor/vim-lumen')     " automatic background color. Disabled for now.
     if executable('ctags')         " use tagbar if ctags is available
         call minpac#add('majutsushi/tagbar')
     endif
@@ -85,11 +85,13 @@ set showcmd               " Show (partial) commands in status line.
 set showmatch             " Show matching brackets
 set noshowmode            " Get rid of default mode indicator
 
-
+set background=dark
 set termguicolors
 if has('gui_running')
-   set linespace=1
+    set background=light
+    set linespace=1
 endif
+
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 if !exists('g:airline_symbols')
