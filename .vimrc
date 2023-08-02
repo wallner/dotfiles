@@ -13,12 +13,12 @@ function PackInit() abort
     call minpac#add('tpope/vim-sensible')      " use sensible defaults
     call minpac#add('spf13/vim-autoclose')     " close opened parantheses and '\"
     call minpac#add('tpope/vim-repeat')        " make repetition work well with plugins
-    call minpac#add('adelarsq/vim-matchit')    " advanced matching
+    call minpac#add('chrisbra/vim-matchit')    " advanced matching
     call minpac#add('tpope/vim-surround')      " handle surroundings
     call minpac#add('tpope/vim-speeddating')   " use <c-a>/<c-x> on dates
     call minpac#add('junegunn/fzf.vim')        " use fzf for file management
     call minpac#add('preservim/nerdtree')      " install NERDTree
-"    call minpac#add('vimpostor/vim-lumen')     " automatic background color. Disabled for now.
+    call minpac#add('vimpostor/vim-lumen')     " automatic background color. Disabled for now.
     if executable('ctags')         " use tagbar if ctags is available
         call minpac#add('majutsushi/tagbar')
     endif
@@ -85,10 +85,8 @@ set showcmd               " Show (partial) commands in status line.
 set showmatch             " Show matching brackets
 set noshowmode            " Get rid of default mode indicator
 
-set background=dark
 set termguicolors
 if has('gui_running')
-    set background=light
     set linespace=1
 endif
 
@@ -97,10 +95,11 @@ let g:airline#extensions#tabline#enabled = 1
 if !exists('g:airline_symbols')
       let g:airline_symbols = {}
 endif
-
-let g:airline_symbols.space = "\ua0"
+let g:airline_theme='solarized'
 let g:solarized_visibility="high"
-colorscheme solarized8
+let g:solarized_extra_hi_groups=1
+
+colorscheme solarized8_flat
 " Window management
 " split window vertically with <leader> v
 nmap <leader>v :vsplit<CR> <C-w><C-w>

@@ -1,10 +1,6 @@
 # vim: filetype=zsh
 # Florian Wallners zshrc
 
-if [ `id -u` -eq 0 ]; then
-    ROOT='true'
-fi
-
 if [ -d ${HOME}/bin ]; then
     PATH=${HOME}/bin:$PATH
 fi
@@ -42,32 +38,18 @@ setopt MARK_DIRS            # Mark a generated filename as directory '/'
 setopt NUMERIC_GLOB_SORT    # Sort generated numerical file names numerical
 setopt PUSHD_TO_HOME        # empty pushd pushes '~' onto stack
 
+source $HOME/.zsh/fzf.sh
 
-# trying to setup the editor correctly
+precmd ()  { 
+    local theme=$( $HOME/bin/get_theme.sh )
+    if [ "$theme" = "dark" ]; then
+        export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS_DARK"
+    else 
+        export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS_LIGHT"
+    fi
+}
 
-if [[ -x /usr/bin/vim || -x /usr/local/bin/vim ]] then
-    export EDITOR=vim
-else
-    # I catch myself very often typing 'vim' 'though I know its not
-    # there... So I help myself.
-
-    export EDITOR=vi
-    alias vim='vi'
-fi
-
-# enable fzf
-if [[ -v TMUX ]]; then
-    export FZF_TMUX=1
-fi
-export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git'
-export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}
-export FZF_DEFAULT_OPTS='--height 40% --layout=reverse'
-export FZF_CTRL_T_OPTS="${FZF_DEFAULT_OPTS} --preview 'bat --style=numbers --color=always {} | head -500'"
-source /usr/share/fzf/shell/key-bindings.zsh
-# this is a bug in the fedora shipped fzf RPM
-source /usr/share/zsh/site-functions/fzf
-
-# Set up less
+export EDITOR=vim
 export PAGER=less
 export LESS='-deFgiMRSX -P?fFile %f:stdin. ?m(%i of %m) :.line %l ?Lof %L:.?p (%p\%):.'
 export LESSCHARSET=utf-8   # Is this still necessary?
@@ -82,7 +64,7 @@ if [ -f /usr/share/source-highlight/src-hilite-lesspipe.sh ]; then
     LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
 fi
 
-export BAT_THEME="TwoDark"
+export BAT_THEME="Solarized (dark)"
 
 # Don't ignore leading dots when sorting.
 export LC_COLLATE="C"
@@ -176,29 +158,10 @@ if [ -f $HOME/.ocd.sh ]; then
     source "$HOME/.ocd.sh"
 fi
 
-# Magic with Window-Titles
 
-case $TERM in
-    xterm*|dtterm)
-        precmd ()  {print -Pn "\e]0;%n@%m: %~\a"}
-        preexec () {print -Pn "\e]0;%n@%m: [$1]\a"}
-    ;;
-    screen*)
-        precmd()  {print -Pn "\ek %n@%m: %~\e\\"}
-        preexec() {print -Pn "\ek %n@%m: [$1]\e\\"}
-    ;;
-esac
 
 eval "$(direnv hook zsh)"
 
-for file in ${SOURCE_FILES[@]}; do
-    if [ -f $file ]; then
-        source $file
-    fi
-done
 # Removing duplicate entries from $PATH
 typeset -U PATH
 
-system=""
-ROOT=""
-MACOS=""
