@@ -9,8 +9,6 @@ if [ -d "${HOME}/.local/bin" ]; then
     PATH=${HOME}/.local/bin:${PATH}
 fi
 
-# initialize antibody
-source <(antibody init)
 
 export HISTSIZE=6144
 export SAVEHIST=4096
@@ -37,17 +35,6 @@ setopt LONG_LIST_JOBS       # Display jobs in long list formats
 setopt MARK_DIRS            # Mark a generated filename as directory '/'
 setopt NUMERIC_GLOB_SORT    # Sort generated numerical file names numerical
 setopt PUSHD_TO_HOME        # empty pushd pushes '~' onto stack
-
-source $HOME/.zsh/fzf.sh
-
-precmd ()  { 
-    local theme=$( $HOME/bin/get_theme.sh )
-    if [ "$theme" = "dark" ]; then
-        export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS_DARK"
-    else 
-        export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS_LIGHT"
-    fi
-}
 
 export EDITOR=vim
 export PAGER=less
@@ -80,6 +67,7 @@ alias la='ls -a'
 alias cd..="cd .."
 alias \#='sudo'
 alias doch='sudo $(fc -ln -1)'
+alias cat='bat -p'
 alias xps='ps aucx | head -1; ps aucx | grep -i '
 alias https='http --default-scheme=https'
 alias xc='xclip -i -selection clipboard'
@@ -92,6 +80,14 @@ fi
 
 autoload -Uz compinit && compinit -i
 autoload -U +X bashcompinit && bashcompinit
+
+# initialize antidote
+source ${HOME}/.zsh/antidote/antidote.zsh
+bundlefile=${HOME}/.zsh/plugins.txt
+zstyle ':antidote:bundle' file $bundlefile
+staticfile=${HOME}/.zsh/plugins.zsh
+zstyle ':antidote:static' file $staticfile
+antidote load
 
 # Completion caching
 zstyle ':completion::complete:*' use-cache 1
@@ -124,7 +120,20 @@ zstyle ':completion:*:matches' group 'yes'
 zstyle ':completion:*:options' description 'yes'
 zstyle ':completion:*:options' auto-description '%d'
 
-antibody bundle < ~/.zsh/antigen_plugins.txt
+# enable fzf
+export FZF_DEFAULT_OPTS="--height 40% --layout=reverse-list --no-separator"
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --ignore-file "$HOME/.gitexcludes" \
+                               --exclude .git --strip-cwd-prefix'
+export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}
+export FZF_CTRL_T_OPTS="${FZF_DEFAULT_OPTS} --preview 'bat --style=numbers --color=always {} | head -500'"
+export FZF_COMPLETION_OPTS='--border --info=inline'
+
+source /usr/share/fzf/shell/key-bindings.zsh
+# this is a bug in the fedora shipped fzf RPM
+source /usr/share/zsh/site-functions/fzf
+
+zstyle ':fzf-tab:*' default-color $'\033[38;5;245m'
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
 
 if [ $(which terraform > /dev/null 2>&1) ]; then
     complete -o nospace -C /usr/bin/terraform terraform
@@ -157,8 +166,6 @@ fi
 if [ -f $HOME/.ocd.sh ]; then
     source "$HOME/.ocd.sh"
 fi
-
-
 
 eval "$(direnv hook zsh)"
 
