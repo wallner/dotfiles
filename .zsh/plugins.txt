@@ -1,7 +1,7 @@
 romkatv/powerlevel10k
 StackExchange/blackbox
-leophys/zsh-plugin-fzf-finder
-Aloxaf/fzf-tab
-junegunn/fzf-git.sh
 ohmyzsh/ohmyzsh path:plugins/aws
+leophys/zsh-plugin-fzf-finder
+junegunn/fzf-git.sh
+Aloxaf/fzf-tab
 
