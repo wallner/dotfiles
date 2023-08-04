@@ -177,6 +177,12 @@ if [ -f $HOME/.ocd.sh ]; then
     source "$HOME/.ocd.sh"
 fi
 
+case $TERM in
+    xterm*)
+        precmd () {print -Pn "\e]0;%n@%m: %~\a"}
+        ;;
+esac
+
 eval "$(direnv hook zsh)"
 
 # Removing duplicate entries from $PATH
