@@ -121,7 +121,9 @@ zstyle ':completion:*:options' description 'yes'
 zstyle ':completion:*:options' auto-description '%d'
 
 # enable fzf
-export FZF_DEFAULT_OPTS="--height 40% --layout=reverse-list --no-separator"
+export FZF_TMUX=1
+export FZF_TMUX_OPTS="-p60%,40%"
+export FZF_DEFAULT_OPTS="--height 50% --layout=reverse-list --no-separator"
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --ignore-file "$HOME/.gitexcludes" \
                                --exclude .git --strip-cwd-prefix'
 export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}
@@ -129,9 +131,9 @@ export FZF_CTRL_T_OPTS="${FZF_DEFAULT_OPTS} --preview 'bat --style=numbers --col
 export FZF_COMPLETION_OPTS='--border --info=inline'
 
 source /usr/share/fzf/shell/key-bindings.zsh
-# this is a bug in the fedora shipped fzf RPM
-# source /usr/share/zsh/site-functions/fzf
 
+# use tmux popup window
+#zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
 # set default color to one that's readable on solarized-light
 zstyle ':fzf-tab:*' default-color $'\033[38;5;245m'
 # disable sort when completing 'git checkout'
@@ -140,8 +142,17 @@ zstyle ':completion:*:git-checkout:*' sort false
 zstyle ':completion:*:descriptions' format '[%d]'
 # set list-colors to enable filename colorizing
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# enable preview
 # preview directory's content with exa when completing cd
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+# preview systemd unit status
+zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'
+# give a preview of commandline arguments when completing `kill`
+zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
+zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview \
+ '[[ $group == "[process ID]" ]] && ps --pid=$word -o cmd --no-headers -w -w'
+zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-flags --preview-window=down:3:wrap
+# zstyle ':fzf-tab:complete:cd:*' popup-pad 30 0
 # switch group using `,` and `.`
 zstyle ':fzf-tab:*' switch-group ',' '.'
 
