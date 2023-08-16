@@ -16,9 +16,7 @@ function PackInit() abort
     call minpac#add('chrisbra/vim-matchit')    " advanced matching
     call minpac#add('tpope/vim-surround')      " handle surroundings
     call minpac#add('tpope/vim-speeddating')   " use <c-a>/<c-x> on dates
-    call minpac#add('tpope/vim-commentary')    " comment aut stuff
     call minpac#add('junegunn/fzf.vim')        " use fzf for file management
-    call minpac#add('preservim/nerdtree')      " install NERDTree
     call minpac#add('vimpostor/vim-lumen')     " automatic background color.
     if executable('ctags')         " use tagbar if ctags is available
         call minpac#add('majutsushi/tagbar')
