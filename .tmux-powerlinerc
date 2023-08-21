@@ -72,7 +72,7 @@
 # mailcount.sh {
 	# Mailbox type to use. Can be any of {apple_mail, gmail, maildir, mbox, mailcheck}
 	export TMUX_POWERLINE_SEG_MAILCOUNT_MAILBOX_TYPE=""
-	
+
 	## Gmail
 	# Enter your Gmail username here WITH OUT @gmail.com.( OR @domain)
 	export TMUX_POWERLINE_SEG_MAILCOUNT_GMAIL_USERNAME=""
