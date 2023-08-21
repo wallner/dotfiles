@@ -184,10 +184,6 @@ if [ -f /usr/lib64/google-cloud-sdk/completion.zsh.inc ]; then
     source "/usr/lib64/google-cloud-sdk/completion.zsh.inc"
 fi
 
-if [ -f $HOME/.ocd.sh ]; then
-    source "$HOME/.ocd.sh"
-fi
-
 case $TERM in
     xterm*)
         precmd () {print -Pn "\e]0;%n@%m: %~\a"}
