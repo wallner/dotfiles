@@ -192,6 +192,7 @@ esac
 
 eval "$(direnv hook zsh)"
 
+eval "$(zoxide init zsh)"
 # Removing duplicate entries from $PATH
 typeset -U PATH
 
