@@ -67,6 +67,9 @@ set ignorecase                 " Searches are case insensitive
 set smartcase                  " Unless they contain at least one capital letter
 set hlsearch                   " highlight search
 
+" Line numbering
+set number                     " Show current line number
+set relativenumber             " Relative line numbers on
 "NERDTree
 nnoremap <leader>d :NERDTreeToggle<CR>
 
