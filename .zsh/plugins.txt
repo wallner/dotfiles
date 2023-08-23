@@ -3,5 +3,4 @@ StackExchange/blackbox
 ohmyzsh/ohmyzsh path:plugins/aws
 leophys/zsh-plugin-fzf-finder
 junegunn/fzf-git.sh
-Aloxaf/fzf-tab
-
+lincheney/fzf-tab-completion path:zsh/fzf-zsh-completion.sh

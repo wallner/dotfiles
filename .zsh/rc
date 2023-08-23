@@ -9,6 +9,22 @@ if [ -d "${HOME}/.local/bin" ]; then
     PATH=${HOME}/.local/bin:${PATH}
 fi
 
+# Export solarized colors
+export _COL_SOLARIZED_BACKGROUND=230
+export _COL_SOLARIZED_BACKGROUND_HIGHLIGHT=254
+export _COL_SOLARIZED_PRIMARY_CONTENT=66
+export _COL_SOLARIZED_SECONDARY_CONTENT=247
+export _COL_SOLARIZED_EMPHASIZED_CONTENT=242
+
+export _COL_SOLARIZED_RED=1
+export _COL_SOLARIZED_GREEN=2
+export _COL_SOLARIZED_YELLOW=3
+export _COL_SOLARIZED_BLUE=4
+export _COL_SOLARIZED_MAGENTA=5
+export _COL_SOLARIZED_CYAN=6
+export _COL_SOLARIZED_ORANGE=9
+export _COL_SOLARIZED_VIOLET=13
+
 
 export HISTSIZE=6144
 export SAVEHIST=4096
@@ -121,40 +137,61 @@ zstyle ':completion:*:options' description 'yes'
 zstyle ':completion:*:options' auto-description '%d'
 
 # enable fzf
+# # FZF Colors: stolen from https://gitlab.com/psicho/dotfiles and used with love
+
+
+COL_FZF_HL='#859900'
+COL_FZF_HL_PLUS='#859900'
+COL_FZF_POINTER=${_COL_SOLARIZED_BLUE}:regular
+COL_FZF_MARKER=${_COL_SOLARIZED_GREEN}:regular
+COL_FZF_FG_PLUS=${_COL_SOLARIZED_EMPHASIZED_CONTENT}:regular
+COL_FZF_BG_PLUS=${_COL_SOLARIZED_BACKGROUND_HIGHLIGHT}:regular
+COL_FZF_HEADER=${_COL_SOLARIZED_BLUE}:regular
+FZF_TAB_DEFAULT_COLOR=$'\e['"38;5;${_COL_SOLARIZED_PRIMARY_CONTENT}m"
+export FZF_TAB_GROUP_COLORS=(
+    $'\e['"38;5;${_COL_SOLARIZED_RED}m" \
+    $'\e['"38;5;${_COL_SOLARIZED_GREEN}m" \
+    $'\e['"38;5;${_COL_SOLARIZED_YELLOW}m" \
+    $'\e['"38;5;${_COL_SOLARIZED_BLUE}m" \
+    $'\e['"38;5;${_COL_SOLARIZED_MAGENTA}m" \
+    $'\e['"38;5;${_COL_SOLARIZED_CYAN}m" \
+    $'\e['"38;5;${_COL_SOLARIZED_ORANGE}m" \
+    $'\e['"38;5;${_COL_SOLARIZED_VIOLET}m" \
+    $'\e['"38;2;110;195;121m" \
+    $'\e['"38;2;159;195;110m" \
+    $'\e['"38;2;195;173;110m"
+)
+
 export FZF_TMUX=1
 export FZF_TMUX_OPTS="-p60%,40%"
-export FZF_DEFAULT_OPTS="--height 50% --layout=reverse-list --no-separator"
+export FZF_DEFAULT_OPTS="--layout=reverse-list --no-separator --border=rounded \
+                         --info=inline -m --prompt='▶' --pointer='→' \
+                         --marker='♡ '\
+                         --color 'hl:${COL_FZF_HL},hl+:${COL_FZF_HL_PLUS}'\
+                         --color 'pointer:${COL_FZF_POINTER}'\
+                         --color 'marker:${COL_FZF_MARKER},bg+:${COL_FZF_BG_PLUS}'\
+                         --color 'header:${COL_FZF_HEADER},fg+:${COL_FZF_FG_PLUS}'"
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --ignore-file "$HOME/.gitexcludes" \
                                --exclude .git --strip-cwd-prefix'
 export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}
 export FZF_CTRL_T_OPTS="${FZF_DEFAULT_OPTS} --preview 'bat --style=numbers --color=always {} | head -500'"
 export FZF_COMPLETION_OPTS='--border --info=inline'
 
+bindkey '^I' fzf_completion
+
 source /usr/share/fzf/shell/key-bindings.zsh
 
-# use tmux popup window
-#zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
-# set default color to one that's readable on solarized-light
-zstyle ':fzf-tab:*' default-color $'\033[38;5;245m'
+# Searchable display strings
+zstyle ':completion:*' fzf-search-display true
 # disable sort when completing 'git checkout'
 zstyle ':completion:*:git-checkout:*' sort false
 # set descriptions format to enable group support
 zstyle ':completion:*:descriptions' format '[%d]'
 # set list-colors to enable filename colorizing
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-# enable preview
-# preview directory's content with exa when completing cd
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
-# preview systemd unit status
-zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'
 # give a preview of commandline arguments when completing `kill`
 zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
-zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview \
- '[[ $group == "[process ID]" ]] && ps --pid=$word -o cmd --no-headers -w -w'
-zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-flags --preview-window=down:3:wrap
-# zstyle ':fzf-tab:complete:cd:*' popup-pad 30 0
-# switch group using `,` and `.`
-zstyle ':fzf-tab:*' switch-group ',' '.'
+
 
 if [ $(which terraform > /dev/null 2>&1) ]; then
     complete -o nospace -C /usr/bin/terraform terraform
@@ -180,8 +217,16 @@ if [ $(which stern > /dev/null 2>&1) ]; then
     source <(stern --completion zsh)
 fi
 
+if [ $(which zoxide) ]; then
+    eval "$(zoxide init zsh)"
+fi
+
 if [ -f /usr/lib64/google-cloud-sdk/completion.zsh.inc ]; then
     source "/usr/lib64/google-cloud-sdk/completion.zsh.inc"
+fi
+
+if [ -f $HOME/.ocd.sh ]; then
+    source "$HOME/.ocd.sh"
 fi
 
 case $TERM in
@@ -192,7 +237,6 @@ esac
 
 eval "$(direnv hook zsh)"
 
-eval "$(zoxide init zsh)"
 # Removing duplicate entries from $PATH
 typeset -U PATH
 
