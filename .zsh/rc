@@ -87,6 +87,7 @@ alias cat='bat -p'
 alias xps='ps aucx | head -1; ps aucx | grep -i '
 alias https='http --default-scheme=https'
 alias xc='xclip -i -selection clipboard'
+alias vim='vimx'
 
 # Completition control
 
