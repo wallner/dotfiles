@@ -17,8 +17,8 @@ right_status_bar() {
         uptime="省$(uptime | cut -d "," -f 3- | cut -d ":" -f2 | sed -e "s/^[ \t]*//") "
     fi
 
-    time=" $(date +'%H:%M:%S') "
-    user=" $(whoami)@$( hostname -s) "
+    time=" $(date +'%H:%M:%S') "
+    user=" $(whoami)@$( hostname -s) "
 
     echo -n "#[fg=${COL_STATUS_DATETIME_BG},bg=${COL_STATUS_BG},nobold,noitalics,nounderscore]#[fg=${COL_STATUS_DATETIME_FG},bg=${COL_STATUS_DATETIME_BG}]${uptime}"
     echo -n "#[fg=${COL_STATUS_DATETIME_FG},bg=${COL_STATUS_DATETIME_BG},nobold,noitalics,nounderscore]#[fg=${COL_STATUS_DATETIME_FG},bg=${COL_STATUS_DATETIME_BG}]${date}"
