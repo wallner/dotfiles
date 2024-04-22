@@ -140,7 +140,6 @@ zstyle ':completion:*:options' auto-description '%d'
 # enable fzf
 # # FZF Colors: stolen from https://gitlab.com/psicho/dotfiles and used with love
 
-
 COL_FZF_HL='#859900'
 COL_FZF_HL_PLUS='#859900'
 COL_FZF_POINTER=${_COL_SOLARIZED_BLUE}:regular
@@ -231,8 +230,8 @@ if [ -f /usr/lib64/google-cloud-sdk/completion.zsh.inc ]; then
     source "/usr/lib64/google-cloud-sdk/completion.zsh.inc"
 fi
 
-if [ -f $HOME/.ocd.sh ]; then
-    source "$HOME/.ocd.sh"
+if [ -d ${HOME}/go ]; then
+    export GOPATH=${HOME}/go
 fi
 
 case $TERM in
