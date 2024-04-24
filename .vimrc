@@ -23,8 +23,6 @@ function PackInit() abort
         call minpac#add('majutsushi/tagbar')
     endif
 
-    call minpac#add('vim-airline/vim-airline-themes')
-
 endfunction
 
 command! PackUpdate source $MYVIMRC | call PackInit() | call minpac#update()
