@@ -10,16 +10,16 @@ function PackInit() abort
     call minpac#init()
     call minpac#add('k-takata/minpac', {'type': 'opt'})
 
-    call minpac#add('tpope/vim-sensible')      " use sensible defaults
-    call minpac#add('spf13/vim-autoclose')     " close opened parantheses and '\"
-    call minpac#add('tpope/vim-repeat')        " make repetition work well with plugins
-    call minpac#add('chrisbra/vim-matchit')    " advanced matching
-    call minpac#add('tpope/vim-surround')      " handle surroundings
-    call minpac#add('tpope/vim-speeddating')   " use <c-a>/<c-x> on dates
-    call minpac#add('junegunn/fzf.vim')        " use fzf for file management
+    call minpac#add('tpope/vim-sensible')             " use sensible defaults
+    call minpac#add('spf13/vim-autoclose')            " close opened parantheses and '\"
+    call minpac#add('tpope/vim-repeat')               " make repetition work well with plugins
+    call minpac#add('chrisbra/vim-matchit')           " advanced matching
+    call minpac#add('tpope/vim-surround')             " handle surroundings
+    call minpac#add('tpope/vim-speeddating')          " use <c-a>/<c-x> on dates
+    call minpac#add('junegunn/fzf.vim')               " use fzf for file management
+    call minpac#add('vimpostor/vim-lumen')            " automatic background color.
     call minpac#add('vim-airline/vim-airline-themes') " missing themes?
-    call minpac#add('vimpostor/vim-lumen')     " automatic background color.
-    if executable('ctags')         " use tagbar if ctags is available
+    if executable('ctags')                            " use tagbar if ctags is available
         call minpac#add('majutsushi/tagbar')
     endif
 
