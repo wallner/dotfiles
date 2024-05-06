@@ -230,8 +230,8 @@ if [ -f /usr/lib64/google-cloud-sdk/completion.zsh.inc ]; then
     source "/usr/lib64/google-cloud-sdk/completion.zsh.inc"
 fi
 
-if [ -d ${HOME}/go ]; then
-    export GOPATH=${HOME}/go
+if [ -d ${HOME}/workspace/golang ]; then
+    export GOPATH=${HOME}/workspace/golang
 fi
 
 case $TERM in
