@@ -9,6 +9,11 @@ if [ -d "${HOME}/.local/bin" ]; then
     PATH=${HOME}/.local/bin:${PATH}
 fi
 
+if [ -d ${HOME}/workspace/golang ]; then
+    export GOPATH=${HOME}/workspace/golang
+    PATH=${PATH}:${GOPATH}/bin
+fi
+
 # Export solarized colors
 export _COL_SOLARIZED_BACKGROUND=230
 export _COL_SOLARIZED_BACKGROUND_HIGHLIGHT=254
@@ -230,9 +235,6 @@ if [ -f /usr/lib64/google-cloud-sdk/completion.zsh.inc ]; then
     source "/usr/lib64/google-cloud-sdk/completion.zsh.inc"
 fi
 
-if [ -d ${HOME}/workspace/golang ]; then
-    export GOPATH=${HOME}/workspace/golang
-fi
 
 case $TERM in
     xterm*)
