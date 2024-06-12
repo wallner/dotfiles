@@ -13,7 +13,7 @@ function PackInit() abort
     call minpac#add('tpope/vim-sensible')             " use sensible defaults
     call minpac#add('spf13/vim-autoclose')            " close opened parantheses and '\"
     call minpac#add('tpope/vim-repeat')               " make repetition work well with plugins
-    call minpac#add('chrisbra/vim-matchit')           " advanced matching
+    call minpac#add('chrisbra/matchit')               " advanced matching
     call minpac#add('tpope/vim-surround')             " handle surroundings
     call minpac#add('tpope/vim-speeddating')          " use <c-a>/<c-x> on dates
     call minpac#add('junegunn/fzf.vim')               " use fzf for file management
@@ -101,6 +101,7 @@ let g:solarized_visibility="high"
 let g:solarized_extra_hi_groups=1
 
 colorscheme solarized8_flat
+
 " Window management
 " split window vertically with <leader> v
 nmap <leader>v :vsplit<CR> <C-w><C-w>
@@ -122,4 +123,4 @@ endif " has("autocmd")
 " My mappings
 map <F5> :set number<CR>     " Turn on linenumbers.
 map <F6> :set nonumber<CR>   " Turn off linenumbers.
-
+nnoremap <leader>p :GFiles<CR>
