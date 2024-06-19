@@ -168,7 +168,7 @@ export FZF_TAB_GROUP_COLORS=(
 )
 
 export FZF_TMUX=1
-export FZF_TMUX_OPTS="-p60%,40%"
+export FZF_TMUX_OPTS="-p80%,60%"
 export FZF_DEFAULT_OPTS="--layout=reverse-list --no-separator --border=rounded \
                          --info=inline -m --prompt='▶' --pointer='→' \
                          --marker='♡ '\
@@ -179,7 +179,8 @@ export FZF_DEFAULT_OPTS="--layout=reverse-list --no-separator --border=rounded \
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --ignore-file "$HOME/.gitexcludes" \
                                --exclude .git --strip-cwd-prefix'
 export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}
-export FZF_CTRL_T_OPTS="${FZF_DEFAULT_OPTS} --preview 'bat --style=numbers --color=always {} | head -500'"
+export FZF_CTRL_T_OPTS="${FZF_DEFAULT_OPTS} --preview 'pistol {}' \
+                         --header 'E to edit' --bind 'E:execute(vim {})'" \
 export FZF_COMPLETION_OPTS='--border --info=inline'
 
 bindkey '^I' fzf_completion
