@@ -15,10 +15,9 @@ if [ -d ${HOME}/workspace/golang ]; then
 fi
 
 # Export solarized colors
-export _COL_SOLARIZED_BACKGROUND=230
 export _COL_SOLARIZED_BACKGROUND_HIGHLIGHT=254
 export _COL_SOLARIZED_PRIMARY_CONTENT=66
-export _COL_SOLARIZED_SECONDARY_CONTENT=247
+export _COL_SOLARIZED_EMPHASIZED_CONTENT=1
 export _COL_SOLARIZED_EMPHASIZED_CONTENT=242
 
 export _COL_SOLARIZED_RED=1
@@ -129,8 +128,8 @@ zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 # match uppercase from lowercase
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 
-# activate menu selection
-zstyle ':completion:*' menu select
+# force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
+zstyle ':completion:*' menu no
 
 # offer indexes before parameters in subscripts
 zstyle ':completion:*:*:-subscript-:*' tag-order indexes parameters
@@ -184,6 +183,7 @@ export FZF_TAB_GROUP_COLORS=(
     $'\e['"38;2;195;173;110m"
 )
 
+
 export FZF_TMUX=1
 export FZF_TMUX_OPTS="-p80%,60%"
 export FZF_DEFAULT_OPTS="--layout=reverse-list --no-separator --border=rounded \
@@ -207,6 +207,7 @@ source /usr/share/fzf/shell/key-bindings.zsh
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
 zstyle ':fzf-tab:*' popup-min-size 70 25
 zstyle ':fzf-tab:*' popup-pad 30 0
+zstyle ':fzf-tab:*' default-color $'\033[38m'
 
 # Show systemd unit status
 zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'
@@ -246,6 +247,7 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'pistol ${(Q)realpath}'
 
  if [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
     source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#bcbcbc"
 fi
 
 if [ $(which terraform > /dev/null 2>&1) ]; then
