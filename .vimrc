@@ -17,6 +17,7 @@ function PackInit() abort
     call minpac#add('tpope/vim-surround')             " handle surroundings
     call minpac#add('tpope/vim-speeddating')          " use <c-a>/<c-x> on dates
     call minpac#add('junegunn/fzf.vim')               " use fzf for file management
+    call minpac#add('catppuccin/vim')                 " catppuccin colorscheme
     call minpac#add('vimpostor/vim-lumen')            " automatic background color.
     call minpac#add('vim-airline/vim-airline-themes') " missing themes?
     if executable('ctags')                            " use tagbar if ctags is available
@@ -96,11 +97,10 @@ let g:airline#extensions#tabline#enabled = 1
 if !exists('g:airline_symbols')
       let g:airline_symbols = {}
 endif
-let g:airline_theme='solarized'
-let g:solarized_visibility="high"
-let g:solarized_extra_hi_groups=1
+let g:lumen_light_colorscheme='catppuccin_latte'
+let g:lumen_dark_colorscheme='catppuccin_frappe'
+let g:airline_theme='catppuccin_mocha'
 
-colorscheme solarized8_flat
 
 " Window management
 " split window vertically with <leader> v
