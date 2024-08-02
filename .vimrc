@@ -94,12 +94,12 @@ endif
 
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme='catppuccin_mocha'
 if !exists('g:airline_symbols')
       let g:airline_symbols = {}
 endif
 let g:lumen_light_colorscheme='catppuccin_latte'
 let g:lumen_dark_colorscheme='catppuccin_frappe'
-let g:airline_theme='catppuccin_mocha'
 
 
 " Window management
