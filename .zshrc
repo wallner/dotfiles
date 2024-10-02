@@ -86,11 +86,12 @@ autoload -Uz compinit && compinit -i
 autoload -U +X bashcompinit && bashcompinit
 
 # initialize antidote
+if [ ! -d ${HOME}/.zsh/antidote ]; then
+    git clone --depth=1 https://github.com/mattmc3/antidote.git ${HOME}/.zsh/antidote
+fi
 source ${HOME}/.zsh/antidote/antidote.zsh
-bundlefile=${HOME}/.zsh/plugins.txt
-zstyle ':antidote:bundle' file $bundlefile
-staticfile=${HOME}/.zsh/plugins.zsh
-zstyle ':antidote:static' file $staticfile
+zstyle ':antidote:bundle' file ${HOME}/.zsh/plugins.txt
+zstyle ':antidote:static' file ${HOME}/.zsh/plugins.zsh
 antidote load
 
 # Completion caching
