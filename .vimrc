@@ -12,6 +12,7 @@ function PackInit() abort
 
     call minpac#add('tpope/vim-sensible')             " use sensible defaults
     call minpac#add('spf13/vim-autoclose')            " close opened parantheses and '\"
+    call minpac#add('andymass/vim-matchup')           " match language specfic words with %
     call minpac#add('tpope/vim-repeat')               " make repetition work well with plugins
     call minpac#add('chrisbra/matchit')               " advanced matching
     call minpac#add('tpope/vim-surround')             " handle surroundings
