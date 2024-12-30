@@ -11,6 +11,7 @@ function PackInit() abort
     call minpac#add('k-takata/minpac', {'type': 'opt'})
 
     call minpac#add('tpope/vim-sensible')             " use sensible defaults
+    call minpac#add('tpope/vim-sleuth')               " automatically adjust 'shiftwidth' and 'expandtab'
     call minpac#add('spf13/vim-autoclose')            " close opened parantheses and '\"
     call minpac#add('andymass/vim-matchup')           " match language specfic words with %
     call minpac#add('tpope/vim-repeat')               " make repetition work well with plugins
