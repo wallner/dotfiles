@@ -257,13 +257,6 @@ if [ -f /usr/lib64/google-cloud-sdk/completion.zsh.inc ]; then
     source "/usr/lib64/google-cloud-sdk/completion.zsh.inc"
 fi
 
-
-case $TERM in
-    xterm*)
-        precmd () {print -Pn "\e]0;%n@%m: %~\a"}
-        ;;
-esac
-
 eval "$(direnv hook zsh)"
 
 # Removing duplicate entries from $PATH

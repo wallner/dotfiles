@@ -1,0 +1,7 @@
+theme = dark:catppuccin-frappe,light:catppuccin-latte
+window-theme = auto
+# background-opacity = 0.9
+
+mouse-hide-while-typing = true
+shell-integration-features = no-cursor,sudo
+
