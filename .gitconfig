@@ -1,6 +1,6 @@
 [user]
     name = Florian Wallner
-    email = wallner@hey.com
+    email = florian.wallner@proton.me
 [color]
     ui = auto
 [core]
@@ -37,8 +37,8 @@
 [pull]
     rebase = true
 [credential "https://github.com"]
-	helper = 
+	helper =
 	helper = !/usr/bin/gh auth git-credential
 [credential "https://gist.github.com"]
-	helper = 
+	helper =
 	helper = !/usr/bin/gh auth git-credential
