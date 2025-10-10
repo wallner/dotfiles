@@ -32,6 +32,8 @@ setopt COMPLETE_IN_WORD     # Don't move to end of word when completeing.
 setopt CORRECT              # Try auto correction of commands
 setopt EQUALS               # Filename expansion on right hand side of '='
 setopt HIST_IGNORE_ALL_DUPS # Remove all duplicates from the history
+setopt HIST_IGNORE_DUPS     # Ignore duplicates of direct predecessor
+setopt HIST_IGNORE_SPACE    # Remove command from history if it starts with a space
 setopt HIST_NO_STORE        # Don't store history in the history
 setopt HIST_REDUCE_BLANKS   # Remove all superflous blanks from history entries
 setopt SHARE_HISTORY        # History is shared between shells.
@@ -264,6 +266,3 @@ typeset -U PATH
 
 eval "$(starship init zsh)"
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="$HOME/.sdkman"
-[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
