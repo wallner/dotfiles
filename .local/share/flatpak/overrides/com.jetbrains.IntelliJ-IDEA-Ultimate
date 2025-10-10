@@ -2,7 +2,7 @@
 filesystems=host-os
 
 [Environment]
-FLATPAK_ENABLE_SDK_EXT=golang,node24,node22,node20,openjdk,openjdk25,openjdk21,openjdk17,rust-stable,typescript
+FLATPAK_ENABLE_SDK_EXT=golang,node22,node20,openjdk,openjdk21,openjdk17,rust-stable,typescrypt
 DOCKER_HOST=unix:///run/user/1000/podman/podman.sock
 DOCKER_BIN=/home/wallner/.local/bin/docker
 
