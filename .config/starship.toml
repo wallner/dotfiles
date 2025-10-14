@@ -3,6 +3,7 @@
 palette = "catppuccin_macchiato"
 # [░▒▓](fg:base)\
 format = """
+[](base)\
 $character\
 $os\
 $username\
@@ -23,10 +24,10 @@ $rust\
 $scala\
 $docker_context\
 $time\
-[ ](base)\
+[ ](base)\
 """
 
-right_format = "([$cmd_duration](base))"
+right_format = "([$cmd_duration](base))"
 
 # Disable the blank line at the start of the prompt
 add_newline = false
@@ -123,28 +124,28 @@ truncation_symbol = "…/"
 [c]
 symbol = ' '
 style = 'bg:base fg:teal'
-format = '[ ](bg:base fg:overlay1)[$symbol ($version) ]($style)'
+format = '[\) ](bg:base fg:overlay1)[$symbol ($version) ]($style)'
 
 [docker_context]
 symbol = ' '
 style = "bg:base fg::sapphire"
-format = '[ ](bg:base fg:overlay1)[$symbol $context ]($style)'
+format = '[\) ](bg:base fg:overlay1)[$symbol $context ]($style)'
 
 [elixir]
 symbol = ""
 style = "bg:base fg:teal"
-format = '[ ](bg:base fg:overlay1)[$symbol ($version) ]($style)'
+format = '[\) ](bg:base fg:overlay1)[$symbol ($version) ]($style)'
 
 [elm]
 symbol = ""
 style = "bg:base fg:teal"
-format = '[ ](bg:base fg:overlay1)[$symbol ($version) ]($style)'
+format = '[\) ](bg:base fg:overlay1)[$symbol ($version) ]($style)'
 
 [git_branch]
 symbol = ""
 style = "green bg:base"
 truncation_length = 32
-format = '[ ](bg:base fg:overlay1)[$symbol $branch]($style)'
+format = '[\) ](bg:base fg:overlay1)[$symbol $branch]($style)'
 
 [git_status]
 style = "green bg:base"
@@ -162,52 +163,53 @@ deleted = "[ ✘${count}](red bg:base)"
 [golang]
 symbol = ""
 style = "bg:base fg:teal"
-format = '[ ](bg:base fg:overlay1)[$symbol ($version) ]($style)'
+format = '[\) ](bg:base fg:overlay1)[$symbol ($version) ]($style)'
 
 [gradle]
 style = "bg:base fg:teal"
-format = '[ ](bg:base fg:overlay1)[$symbol ($version) ]($style)'
+format = '[\) ](bg:base fg:overlay1)[$symbol ($version) ]($style)'
+disabled = true
 
 [haskell]
 symbol = ""
 style = "bg:base fg:teal"
-format = '[ ](bg:base fg:overlay1)[$symbol ($version) ]($style)'
+format = '[\) ](bg:base fg:overlay1)[$symbol ($version) ]($style)'
 
 [java]
 symbol = ""
 style = "bg:base fg:teal"
-format = '[ ](bg:base fg:overlay1)[$symbol ($version)]($style)'
+format = '[\) ](bg:base fg:overlay1)[$symbol ($version)]($style)'
 
 [julia]
 symbol = ""
 style = "bg:base fg:teal"
-format = '[ ](bg:base fg:overlay1)[$symbol ($version) ]($style)[ ](bg:base fg:overlay1)'
+format = '[\) ](bg:base fg:overlay1)[$symbol ($version) ]($style)[ ](bg:base fg:overlay1)'
 
 [nodejs]
 symbol = ""
 style = "bg:base fg:teal"
-format = '[ ](bg:base fg:overlay1)[$symbol ($version) ]($style)[ ](bg:base fg:overlay1)'
+format = '[\) ](bg:base fg:overlay1)[$symbol ($version) ]($style)[ ](bg:base fg:overlay1)'
 
 [nim]
 symbol = "󰆥"
 style = "bg:base fg:teal"
-format = '[ ](bg:base fg:overlay1)[$symbol ($version) ]($style)[ ](bg:base fg:overlay1)'
+format = '[\) ](bg:base fg:overlay1)[$symbol ($version) ]($style)[ ](bg:base fg:overlay1)'
 
 [rust]
 symbol = ""
 style = "bg:base fg:teal"
-format = '[ ](bg:base fg:overlay1)[$symbol ($version) ]($style)[ ](bg:base fg:overlay1)'
+format = '[\) ](bg:base fg:overlay1)[$symbol ($version) ]($style)[ ](bg:base fg:overlay1)'
 
 [scala]
 symbol = ""
 style = "bg:base fg:teal"
-format = '[ ](bg:base fg:overlay1)[$symbol ($version) ]($style)[ ](bg:base fg:overlay1)'
+format = '[\) ](bg:base fg:overlay1)[$symbol ($version) ]($style)[ ](bg:base fg:overlay1)'
 
 [time]
 disabled = true
 time_format = "%R" # Hour:Minute Format
 style = "bg:base fg:blue"
-format = '[ ](bg:base fg:overlay1)[♥ $time ]($style)[ ](bg:base fg:overlay1)'
+format = '[\) ](bg:base fg:overlay1)[♥ $time ]($style)[ ](bg:base fg:overlay1)'
 
 [character]
 format = '[ $symbol ](bg:base)'

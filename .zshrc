@@ -223,8 +223,12 @@ zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
 # preview for directories
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'pistol ${(Q)realpath}'
 
- if [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
+if [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
     source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
+
+if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
+    source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
 if [ $(which terraform > /dev/null 2>&1) ]; then
