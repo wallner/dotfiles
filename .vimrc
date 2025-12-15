@@ -105,6 +105,10 @@ endif
 let g:lumen_light_colorscheme='catppuccin_latte'
 let g:lumen_dark_colorscheme='catppuccin_frappe'
 
+" Basic latex setup
+let g:Tex_DefaultTargetFormat='pdf'
+let g:Tex_CompileRule_pdf='latexmk -pdf $*'
+
 
 " Window management
 " split window vertically with <leader> v
