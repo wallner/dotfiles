@@ -1,13 +1,15 @@
+#!/bin/bash
 set -eu
 
-THEME=$(gsettings get org.gnome.desktop.interface color-scheme)
+# Get the value (e.g., 'prefer-dark', 'default', 'prefer-light')
+theme=$(gsettings get org.gnome.desktop.interface color-scheme)
 
-THEME=$(echo $THEME | tr -d "'")
-SUBSTR=${THEME%-dark}
+# Remove single quotes using bash parameter expansion
+theme=${theme//\'}
 
-if [ "$SUBSTR" = "$THEME" ]
-then
-        echo light
+# Check if the string ends in "-dark"
+if [[ "$theme" == *"-dark" ]]; then
+    echo "dark"
 else
-        echo dark
+    echo "light"
 fi

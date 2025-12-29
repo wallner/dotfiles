@@ -1,0 +1,9 @@
+[Unit]
+Description=Watch for Desktop Theme Changes
+
+[Service]
+ExecStart=%h/.local/bin/watch_theme.sh
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
