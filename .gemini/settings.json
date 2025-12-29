@@ -1,0 +1,17 @@
+{
+  "security": {
+    "auth": {
+      "selectedType": "oauth-personal"
+    }
+  },
+  "general": {
+    "previewFeatures": true,
+    "enablePromptCompletion": false,
+    "vimMode": true
+  },
+  "ui": {
+    "showCitations": true,
+    "hideBanner": true,
+    "theme": "Default"
+  }
+}
