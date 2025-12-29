@@ -79,10 +79,7 @@ alias xc='xclip -i -selection clipboard'
 alias vim='vimx'
 
 # Completition control
-
-if [ -d "${HOME}/.zsh/completion" ]; then
-    fpath=(${HOME}/.zsh/completion/ $fpath)
-fi
+fpath=($HOME/.zsh/completion $fpath)
 
 autoload -Uz compinit && compinit -i
 autoload -U +X bashcompinit && bashcompinit
@@ -231,31 +228,31 @@ if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
     source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
-if [ $(which terraform > /dev/null 2>&1) ]; then
+if (( $+commands[terraform] )); then
     complete -o nospace -C /usr/bin/terraform terraform
 fi
 
-if [ $(which kubectl > /dev/null 2>&1) ]; then
+if (( $+commands[kubectl] )); then
     source <(kubectl completion zsh)
 fi
 
-if [ $(which minikube > /dev/null 2>&1) ]; then
+if (( $+commands[minikube] )); then
     source <(minikube completion zsh)
 fi
 
-if [ $(which helm > /dev/null 2>&1) ]; then
+if (( $+commands[helm] )); then
     source <(helm completion zsh)
 fi
 
-if [ $(which k3d > /dev/null 2>&1) ]; then
+if (( $+commands[k3d] )); then
     source <(k3d completion zsh)
 fi
 
-if [ $(which stern > /dev/null 2>&1) ]; then
+if (( $+commands[stern] )); then
     source <(stern --completion zsh)
 fi
 
-if [ $(which zoxide) ]; then
+if (( $+commands[zoxide] )); then
     eval "$(zoxide init zsh)"
 fi
 
