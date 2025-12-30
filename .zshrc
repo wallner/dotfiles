@@ -232,6 +232,10 @@ if (( $+commands[terraform] )); then
     complete -o nospace -C /usr/bin/terraform terraform
 fi
 
+if (( $+commands[tofu] )); then
+    complete -o nospace -C /usr/bin/tofu tofu
+fi
+
 if (( $+commands[kubectl] )); then
     source <(kubectl completion zsh)
 fi
@@ -266,4 +270,5 @@ eval "$(direnv hook zsh)"
 typeset -U PATH
 
 eval "$(starship init zsh)"
+
 
