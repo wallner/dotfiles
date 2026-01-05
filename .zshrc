@@ -229,11 +229,11 @@ if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
 fi
 
 if (( $+commands[terraform] )); then
-    complete -o nospace -C /usr/bin/terraform terraform
+    complete -o nospace -C $(which terraform) terraform
 fi
 
 if (( $+commands[tofu] )); then
-    complete -o nospace -C /usr/bin/tofu tofu
+    complete -o nospace -C $(which tofu) tofu
 fi
 
 if (( $+commands[kubectl] )); then
