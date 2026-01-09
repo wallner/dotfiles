@@ -67,8 +67,15 @@ export LANG=en_US.UTF-8
 alias mv='nocorrect mv'    # no spelling correction on mv
 alias cp='nocorrect cp'    # no spelling correction on cp
 alias mkdir='nocorrect mkdir' # no spelling correction on mkdir
-alias ll='ls -l'
-alias la='ls -a'
+
+if (( $+commands[eza] )); then
+    alias ll='eza -l --icons --git --group-directories-first'
+    alias la='eza -la --icons --git --group-directories-first'
+else
+    alias ll='ls -l'
+    alias la='ls -a'
+fi
+
 alias cd..="cd .."
 alias \#='sudo'
 alias doch='sudo $(fc -ln -1)'
@@ -257,7 +264,7 @@ if (( $+commands[stern] )); then
 fi
 
 if (( $+commands[zoxide] )); then
-    eval "$(zoxide init zsh)"
+    eval "$(zoxide init zsh --cmd cd)"
 fi
 
 if [ -f /usr/lib64/google-cloud-sdk/completion.zsh.inc ]; then
