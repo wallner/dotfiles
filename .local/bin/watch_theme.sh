@@ -8,6 +8,7 @@ GET_THEME_SCRIPT="$BASE_DIR/get_theme.sh"
 GEMINI_CONFIG="$HOME/.gemini/settings.json"
 BAT_CONFIG="$HOME/.config/bat/config"
 ZSH_THEME_FILE="$HOME/.zsh/theme_colors.zsh"
+VIVID_BIN="$HOME/.local/bin/vivid"
 
 # Load theme definitions
 if [[ -f "$THEMES_DEF" ]]; then
@@ -34,7 +35,6 @@ check_dependencies() {
 
 get_current_mode() {
     local mode
-    # Safely get theme or fallback to last known (LAST_THEME is handled via parameter expansion)
     mode=$("$GET_THEME_SCRIPT" 2>/dev/null || echo "unknown")
     if [[ "$mode" == "unknown" ]]; then
         echo "${LAST_THEME:-dark}" 
@@ -47,19 +47,14 @@ update_gemini_config() {
     local theme_mode="$1"
     local gemini_theme
     [[ ! -f "$GEMINI_CONFIG" ]] && return 0
-
     [[ "$theme_mode" == "light" ]] && gemini_theme="$GEMINI_THEME_LIGHT" || gemini_theme="$GEMINI_THEME_DARK"
 
     local tmp_file
     tmp_file=$(mktemp)
-    # Ensure cleanup on function return
     trap 'rm -f "$tmp_file"' RETURN
 
     if jq --arg theme "$gemini_theme" '.ui.theme = $theme' "$GEMINI_CONFIG" > "$tmp_file"; then
-        # Preserve symlinks by using cat
         cat "$tmp_file" > "$GEMINI_CONFIG"
-    else
-        log "Error: Failed to update Gemini config with jq"
     fi
 }
 
@@ -73,19 +68,27 @@ update_bat_config() {
 
 update_zsh_theme() {
     local theme_mode="$1"
-    local fzf_colors autosuggest
+    local fzf_colors autosuggest ls_colors vivid_theme
     mkdir -p "$(dirname "$ZSH_THEME_FILE")"
 
     if [[ "$theme_mode" == "light" ]]; then
         fzf_colors="$ZSH_FZF_COLORS_LIGHT"
         autosuggest="$ZSH_AUTOSUGGEST_LIGHT"
+        vivid_theme="$VIVID_THEME_LIGHT"
     else
         fzf_colors="$ZSH_FZF_COLORS_DARK"
         autosuggest="$ZSH_AUTOSUGGEST_DARK"
+        vivid_theme="$VIVID_THEME_DARK"
     fi
 
-    # Write the theme file for Zsh to source
+    # Generate LS_COLORS using vivid if available
+    ls_colors=""
+    if [[ -x "$VIVID_BIN" ]]; then
+        ls_colors=$("$VIVID_BIN" generate "$vivid_theme")
+    fi
+
     cat << EOF > "$ZSH_THEME_FILE"
+export LS_COLORS="$ls_colors"
 export FZF_DEFAULT_OPTS="\${FZF_BASE_OPTS} $fzf_colors"
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="$autosuggest"
 export FZF_CTRL_T_OPTS="\${FZF_DEFAULT_OPTS} --preview 'pistol {}' --header 'E to edit' --bind 'E:execute(vim {})'"
