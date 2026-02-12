@@ -11,7 +11,9 @@ fi
 
 if [ -d ${HOME}/workspace/golang ]; then
     export GOPATH=${HOME}/workspace/golang
-    PATH=${PATH}:${GOPATH}/bin
+    export GOBIN=${GOPATH}/bin
+
+    PATH=${PATH}:${GOBIN}
 fi
 
 export HISTSIZE=6144
