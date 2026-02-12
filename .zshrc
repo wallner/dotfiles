@@ -150,37 +150,27 @@ zstyle ':completion::*:(-command-|-parameter-|-brace-parameter-|export|unset|exp
 # preview a `git status` when completing git add
 zstyle ':completion::*:git::git,add,*' fzf-completion-opts --preview='git -c color.status=always status --short'
 
-# enable fzf
-
+# FZF Configuration
 export FZF_TMUX=1
 export FZF_TMUX_OPTS="-p80%,60%"
-export FZF_DEFAULT_OPTS="--layout=reverse-list --no-separator --border=rounded \
+export FZF_BASE_OPTS="--layout=reverse-list --no-separator --border=rounded \
                          --info=inline -m --prompt='▶' --pointer='→' \
                          --marker='♡ '"
+export FZF_DEFAULT_OPTS="${FZF_BASE_OPTS}"
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --ignore-file "$HOME/.gitexcludes" \
                                --exclude .git --strip-cwd-prefix'
 export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}
 export FZF_COMPLETION_OPTS='--border --info=inline'
 
+# Load initial theme colors
+[[ -f "$HOME/.zsh/theme_colors.zsh" ]] && source "$HOME/.zsh/theme_colors.zsh"
+touch "$HOME/.zsh/last_theme_load"
+
 precmd() {
-    if [ $(get_theme.sh) = 'dark' ]; then
-        export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} \
-                        --color=bg+:#414559,bg:#303446,spinner:#f2d5cf,hl:#e78284 \
-                        --color=fg:#c6d0f5,header:#e78284,info:#ca9ee6,pointer:#f2d5cf \
-                        --color=marker:#f2d5cf,fg+:#c6d0f5,prompt:#ca9ee6,hl+:#e78284"
-        export FZF_CTRL_T_OPTS="${FZF_DEFAULT_OPTS} --preview 'pistol {}' \
-                         --header 'E to edit' --bind 'E:execute(vim {})'"
-        export BAT_THEME="Catppuccin Macchiato"
-        export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#838ba7"  #Frappe overlay1
-    else
-        export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} \
-                        --color=bg+:#ccd0da,bg:#eff1f5,spinner:#dc8a78,hl:#d20f39 \
-                        --color=fg:#4c4f69,header:#d20f39,info:#8839ef,pointer:#dc8a78 \
-                        --color=marker:#dc8a78,fg+:#4c4f69,prompt:#8839ef,hl+:#d20f39"
-        export FZF_CTRL_T_OPTS="${FZF_DEFAULT_OPTS} --preview 'pistol {}' \
-                         --header 'E to edit' --bind 'E:execute(vim {})'"
-        export BAT_THEME="Catppuccin Latte"
-        export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#8c8fa1" # Latte Overlay1
+    # Fast check if theme file was updated by the watcher
+    if [[ "$HOME/.zsh/theme_colors.zsh" -nt "$HOME/.zsh/last_theme_load" ]]; then
+        source "$HOME/.zsh/theme_colors.zsh"
+        touch "$HOME/.zsh/last_theme_load"
     fi
 }
 
