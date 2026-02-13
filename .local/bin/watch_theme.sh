@@ -7,7 +7,7 @@ THEMES_DEF="$BASE_DIR/themes.sh"
 GET_THEME_SCRIPT="$BASE_DIR/get_theme.sh"
 GEMINI_CONFIG="$HOME/.gemini/settings.json"
 BAT_CONFIG="$HOME/.config/bat/config"
-ZSH_THEME_FILE="$HOME/.zsh/theme_colors.zsh"
+ZSH_THEME_FILE="$HOME/.local/state/zsh/theme_colors.zsh"
 VIVID_BIN="$HOME/.local/bin/vivid"
 
 # Load theme definitions
@@ -80,6 +80,10 @@ update_zsh_theme() {
         autosuggest="$ZSH_AUTOSUGGEST_DARK"
         vivid_theme="$VIVID_THEME_DARK"
     fi
+
+    # Write fzf colors to XDG compliant location
+    mkdir -p "$HOME/.config/fzf"
+    echo "$fzf_colors" > "$HOME/.config/fzf/colors"
 
     # Generate LS_COLORS using vivid if available
     ls_colors=""
