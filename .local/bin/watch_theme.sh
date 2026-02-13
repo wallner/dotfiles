@@ -24,7 +24,7 @@ log() {
 }
 
 check_dependencies() {
-    local deps=("jq" "dbus-monitor" "gsettings" "cat")
+    local deps=("jq" "busctl" "gsettings" "cat")
     for dep in "${deps[@]}"; do
         if ! command -v "$dep" &> /dev/null; then
             log "Error: Dependency '$dep' not found. Exiting."
@@ -113,9 +113,9 @@ check_dependencies
 LAST_THEME=$(get_current_mode)
 sync_themes "$LAST_THEME"
 
-log "Listening for theme changes..."
-dbus-monitor "type='signal',interface='org.freedesktop.portal.Settings',member='SettingChanged'" | while read -r line; do
-    if echo "$line" | grep -q "color-scheme"; then
+log "Listening for theme changes via busctl..."
+busctl --user monitor --match "type='signal',interface='org.freedesktop.portal.Settings',member='SettingChanged'" | while read -r line; do
+    if [[ "$line" == *"color-scheme"* ]]; then
         sleep 0.2
         CURRENT_THEME=$(get_current_mode)
         if [[ "$CURRENT_THEME" != "$LAST_THEME" ]]; then
