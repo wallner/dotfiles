@@ -1,7 +1,0 @@
-StackExchange/blackbox
-ohmyzsh/ohmyzsh path:plugins/aws
-leophys/zsh-plugin-fzf-finder
-junegunn/fzf-git.sh
-Aloxaf/fzf-tab
-zsh-users/zsh-autosuggestions
-zsh-users/zsh-syntax-highlighting
