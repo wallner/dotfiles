@@ -1,6 +1,6 @@
 # Get editor completions based on the config schema
 "$schema" = 'https://starship.rs/config-schema.json'
-palette = "catppuccin_macchiato"
+palette = "catppuccin_mocha"
 # [░▒▓](fg:base)\
 format = """
 [](base)\
