@@ -16,7 +16,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 -- Source common vim configuration
-vim.cmd('source ~/.vimcommon')
+vim.cmd('source ~/.config/vim/vimcommon')
 
 vim.g.lumen_light_colorscheme= 'catppuccin-latte'
 vim.g.lumen_dark_colorscheme= 'catppuccin-frappe'

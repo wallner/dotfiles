@@ -1,6 +1,6 @@
 " --- Florian Wallners .ideavimrc ---
 " Core settings are managed in .vimcommon
-source ~/.vimcommon
+source ~/.config/vim/vimcommon
 
 Plug 'preservim/nerdtree'
 Plug 'tpope/vim-surround'
