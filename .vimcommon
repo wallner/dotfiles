@@ -1,0 +1,85 @@
+" --- Shared Vim Configuration (.vimcommon) ---
+" This file is sourced by .vimrc, init.lua, and .ideavimrc
+
+" --- General Settings ---
+set nocompatible               " Use Vim defaults
+set vb t_vb=                   " Turn the bell off
+set nostartofline              " Don't jump cursor around
+set modelines=2                " Enable modelines
+set title                      " Set terminal title
+set autowrite                  " Save before :make, :suspend, etc.
+set encoding=utf-8             " Use UTF-8
+set updatetime=100             " Faster update time (better for async)
+set history=100                " Command history limit
+
+" --- Persistent Undo ---
+" (Directory creation should remain in .vimrc, but the settings are common)
+set undofile                   " Enable persistent undo
+
+" --- UI & Display ---
+set number                     " Show current line number
+set relativenumber             " Relative line numbers
+set cursorline                 " Highlight current line
+set showcmd                    " Show (partial) commands
+set showmatch                  " Show matching brackets
+set noshowmode                 " Hide mode indicator (since we use plugins)
+set termguicolors              " Enable 24-bit RGB colors
+
+" --- Searching ---
+set ignorecase                 " Searches are case insensitive
+set smartcase                  " ...unless they contain a capital letter
+set hlsearch                   " Highlight search results
+set incsearch                  " Search while typing
+
+" --- Whitespace & Indentation ---
+set wrap                       " Enable line wrapping
+set autoindent                 " Copy indent from previous line
+set linebreak                  " Wrap at word
+set tabstop=4                  " Tab width
+set shiftwidth=4               " Indention width
+set softtabstop=4              " Tab key behaves like 4 spaces
+set expandtab                  " Use spaces instead of tabs
+set matchpairs+=<:>            " Add pointy brackets to matchpairs
+
+" --- Mouse & Scrolling ---
+set scrolloff=1                " Context lines around cursor
+set sidescroll=1
+set sidescrolloff=2
+
+" --- Leader Key ---
+let mapleader = "\\"
+
+" --- Common Keybindings ---
+" Clear search highlight
+nnoremap <silent> <leader><space> :nohlsearch<CR>
+
+" Window Management
+" Split window vertically with <leader>v
+nnoremap <leader>v :vsplit<CR><C-w>w
+" Split window horizontally with <leader>s
+nnoremap <leader>s :split<CR><C-w>w
+" Switch between windows with <leader>w
+nnoremap <leader>w <C-w>w
+
+" NERDTree Toggle
+nnoremap <leader>d :NERDTreeToggle<CR>
+
+" Tagbar Toggle (safe to keep here)
+nnoremap <silent> <leader>tt :TagbarToggle<CR><C-w><C-w>
+
+" Quick toggles for line numbers
+nnoremap <F5> :set number<CR>
+nnoremap <F6> :set nonumber<CR>
+
+" --- Autocommands (Portable) ---
+if has("autocmd")
+    augroup common_settings
+        autocmd!
+        " Makefiles have real Tabs
+        autocmd FileType make set noexpandtab
+        " Yaml uses tabsize of two
+        autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+        " Markdown/Text width
+        autocmd FileType markdown,text setlocal tw=78
+    augroup END
+endif
