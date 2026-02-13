@@ -18,7 +18,8 @@ fi
 
 export HISTSIZE=6144
 export SAVEHIST=4096
-export HISTFILE=$HOME/.zsh/history
+export HISTFILE=${XDG_STATE_HOME:-$HOME/.local/state}/zsh/history
+mkdir -p "$(dirname "$HISTFILE")"
 
 # keybindings
 bindkey -e                  # emacs key bindings
@@ -87,24 +88,25 @@ alias https='http --default-scheme=https'
 alias xc='xclip -i -selection clipboard'
 alias vim='vimx'
 
-# Completition control
-fpath=($HOME/.zsh/completion $fpath)
+# Completion control
+fpath=(${ZDOTDIR:-$HOME/.config/zsh}/completion $fpath)
 
 autoload -Uz compinit && compinit -i
 autoload -U +X bashcompinit && bashcompinit
 
 # initialize antidote
-if [ ! -d ${HOME}/.zsh/antidote ]; then
-    git clone --depth=1 https://github.com/mattmc3/antidote.git ${HOME}/.zsh/antidote
+antidote_path=${XDG_DATA_HOME:-$HOME/.local/share}/zsh/antidote
+if [ ! -d $antidote_path ]; then
+    git clone --depth=1 https://github.com/mattmc3/antidote.git $antidote_path
 fi
-source ${HOME}/.zsh/antidote/antidote.zsh
-zstyle ':antidote:bundle' file ${HOME}/.zsh/plugins.txt
-zstyle ':antidote:static' file ${HOME}/.zsh/plugins.zsh
+source $antidote_path/antidote.zsh
+zstyle ':antidote:bundle' file ${ZDOTDIR:-$HOME/.config/zsh}/plugins.txt
+zstyle ':antidote:static' file ${XDG_CACHE_HOME:-$HOME/.cache}/zsh/plugins.zsh
 antidote load
 
 # Completion caching
 zstyle ':completion::complete:*' use-cache 1
-zstyle ':completion::complete:*' cache-path $HOME/.zsh/cache/$HOST
+zstyle ':completion::complete:*' cache-path ${XDG_CACHE_HOME:-$HOME/.cache}/zsh/cache/$HOST
 
 # formatting and messages
 zstyle ':completion:*' verbose yes
@@ -157,20 +159,24 @@ export FZF_BASE_OPTS="--layout=reverse-list --no-separator --border=rounded \
                          --info=inline -m --prompt='▶' --pointer='→' \
                          --marker='♡ '"
 export FZF_DEFAULT_OPTS="${FZF_BASE_OPTS}"
+export FZF_DEFAULT_OPTS_FILE="$HOME/.config/fzf/colors"
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --ignore-file "$HOME/.gitexcludes" \
                                --exclude .git --strip-cwd-prefix'
 export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}
 export FZF_COMPLETION_OPTS='--border --info=inline'
 
 # Load initial theme colors
-[[ -f "$HOME/.zsh/theme_colors.zsh" ]] && source "$HOME/.zsh/theme_colors.zsh"
-touch "$HOME/.zsh/last_theme_load"
+theme_file=${XDG_STATE_HOME:-$HOME/.local/state}/zsh/theme_colors.zsh
+theme_stamp=${XDG_STATE_HOME:-$HOME/.local/state}/zsh/last_theme_load
+
+[[ -f "$theme_file" ]] && source "$theme_file"
+touch "$theme_stamp"
 
 precmd() {
     # Fast check if theme file was updated by the watcher
-    if [[ "$HOME/.zsh/theme_colors.zsh" -nt "$HOME/.zsh/last_theme_load" ]]; then
-        source "$HOME/.zsh/theme_colors.zsh"
-        touch "$HOME/.zsh/last_theme_load"
+    if [[ "$theme_file" -nt "$theme_stamp" ]]; then
+        source "$theme_file"
+        touch "$theme_stamp"
     fi
 }
 
