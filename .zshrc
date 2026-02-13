@@ -219,14 +219,6 @@ zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
 # preview for directories
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'pistol ${(Q)realpath}'
 
-if [ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
-    source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-fi
-
-if [ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-    source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
-
 if (( $+commands[terraform] )); then
     complete -o nospace -C $(which terraform) terraform
 fi
@@ -259,9 +251,16 @@ if (( $+commands[zoxide] )); then
     eval "$(zoxide init zsh)"
 fi
 
-if [ -f /usr/lib64/google-cloud-sdk/completion.zsh.inc ]; then
-    source "/usr/lib64/google-cloud-sdk/completion.zsh.inc"
-fi
+# GCloud SDK completion
+for gcloud_completion in \
+    "/usr/lib64/google-cloud-sdk/completion.zsh.inc" \
+    "/usr/share/google-cloud-sdk/completion.zsh.inc" \
+    "/opt/google-cloud-sdk/completion.zsh.inc"; do
+    if [ -f "$gcloud_completion" ]; then
+        source "$gcloud_completion"
+        break
+    fi
+done
 
 eval "$(direnv hook zsh)"
 

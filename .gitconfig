@@ -7,7 +7,7 @@
     pager = delta
     editor = vim
     whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
-    excludesfile = /home/wallner/.gitexcludes
+    excludesfile = ~/.gitexcludes
     autocrlf = input
 [interactive]
     diffFilter = delta --color-only --features=interactive
@@ -43,4 +43,4 @@
 	helper =
 	helper = !/usr/bin/gh auth git-credential
 [maintenance]
-	repo = /home/wallner/depot/dotfiles
+	repo = ~/depot/dotfiles
