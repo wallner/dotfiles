@@ -20,7 +20,7 @@ export HISTSIZE=6144
 export SAVEHIST=4096
 export HISTFILE=$HOME/.zsh/history
 
-# keybindgs
+# keybindings
 bindkey -e                  # emacs key bindings
 bindkey ' ' magic-space     # also do history expansion on space
 bindkey "\e[3~" delete-char # make delete work correctly
@@ -48,7 +48,7 @@ export EDITOR=vim
 export PAGER=less
 export LESS='-deFgiMRSX -P?fFile %f:stdin. ?m(%i of %m) :.line %l ?Lof %L:.?p (%p\%):.'
 export LESSCHARSET=utf-8   # Is this still necessary?
-# Format man pages for a wigth of 80 col no matter how wide the terminal
+# Format man pages for a width of 80 col no matter how wide the terminal
 export MANWIDTH=80
 # Use bat as manual pager
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"

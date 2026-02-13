@@ -21,7 +21,6 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
--- I fail to get auto-dark-mode 
 vim.g.lumen_light_colorscheme= 'catppuccin-latte'
 vim.g.lumen_dark_colorscheme= 'catppuccin-frappe'
 
