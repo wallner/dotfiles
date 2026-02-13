@@ -24,7 +24,7 @@ log() {
 }
 
 check_dependencies() {
-    local deps=("jq" "busctl" "gsettings" "cat")
+    local deps=("jq" "busctl" "gsettings")
     for dep in "${deps[@]}"; do
         if ! command -v "$dep" &> /dev/null; then
             log "Error: Dependency '$dep' not found. Exiting."
@@ -105,6 +105,8 @@ sync_themes() {
     update_gemini_config "$mode"
     update_bat_config "$mode"
     update_zsh_theme "$mode"
+    # Signal running zsh instances to reload theme
+    pkill -USR1 -u "$(id -u)" zsh 2>/dev/null || true
     log "Synced all themes to $mode mode"
 }
 

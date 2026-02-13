@@ -1,2 +1,2 @@
-.zsh/antidote/
-.zsh/plugins.zsh
+.local/share/zsh/antidote/
+.cache/zsh/plugins.zsh

@@ -167,17 +167,11 @@ export FZF_COMPLETION_OPTS='--border --info=inline'
 
 # Load initial theme colors
 theme_file=${XDG_STATE_HOME:-$HOME/.local/state}/zsh/theme_colors.zsh
-theme_stamp=${XDG_STATE_HOME:-$HOME/.local/state}/zsh/last_theme_load
-
 [[ -f "$theme_file" ]] && source "$theme_file"
-touch "$theme_stamp"
 
-precmd() {
-    # Fast check if theme file was updated by the watcher
-    if [[ "$theme_file" -nt "$theme_stamp" ]]; then
-        source "$theme_file"
-        touch "$theme_stamp"
-    fi
+# Reload theme on USR1 signal (sent by theme-watcher.service)
+TRAPUSR1() {
+    [[ -f "$theme_file" ]] && source "$theme_file"
 }
 
 source /usr/share/fzf/shell/key-bindings.zsh

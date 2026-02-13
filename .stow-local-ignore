@@ -1,3 +1,5 @@
-.gemini
-.git
-README.md
+\.gemini
+\.git
+\.gitignore
+\.stow-local-ignore
+README\.md

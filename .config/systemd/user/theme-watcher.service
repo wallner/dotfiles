@@ -5,6 +5,11 @@ Description=Watch for Desktop Theme Changes
 ExecStart=%h/.local/bin/watch_theme.sh
 Restart=on-failure
 RestartSec=5
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=%h/.config/bat %h/.config/fzf %h/.local/state/zsh %h/.gemini
+NoNewPrivileges=true
+PrivateTmp=true
 
 [Install]
 WantedBy=default.target
