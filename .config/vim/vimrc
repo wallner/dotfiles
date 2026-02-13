@@ -2,70 +2,68 @@
 " Core settings are managed in .vimcommon
 source ~/.config/vim/vimcommon
 
-set nocompatible           " Use Vim defaults
+" XDG Path for State (Undo, Info)
+let g:vim_state_home = $HOME . '/.local/state/vim'
+let g:vim_data_home = $HOME . '/.local/share/vim'
 
-function PackInit() abort
-    if empty(glob('~/.vim/pack/minpac/opt/minpac'))
-        silent !git clone --quiet https://github.com/k-takata/minpac.git ~/.vim/pack/minpac/opt/minpac
+if !isdirectory(g:vim_state_home . '/undo')
+    call mkdir(g:vim_state_home . '/undo', "p")
+endif
+
+" Set storage locations
+let &undodir = g:vim_state_home . '/undo'
+let &viminfofile = g:vim_state_home . '/viminfo'
+
+" Tell Vim where to find your own packages (in addition to system ones)
+set packpath^=~/.local/share/vim
+
+" --- Plugin Configuration (Set variables for system plugins) ---
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_theme = 'catppuccin_mocha' " From catppuccin/vim plugin
+let g:airline_left_sep = '' 
+let g:airline_right_sep = ''
+
+" Lumen settings
+let g:lumen_light_colorscheme = 'catppuccin_latte'
+let g:lumen_dark_colorscheme = 'catppuccin_frappe'
+
+" --- Plugin Management with minpac (ONLY for non-system plugins) ---
+function! PackInit() abort
+    let l:minpac_path = g:vim_data_home . '/pack/minpac/opt/minpac'
+    if empty(glob(l:minpac_path))
+        execute 'silent !git clone --quiet https://github.com/k-takata/minpac.git ' . l:minpac_path
     endif
 
     packadd minpac
-    call minpac#init()
+    call minpac#init({'dir': g:vim_data_home})
     call minpac#add('k-takata/minpac', {'type': 'opt'})
 
-    call minpac#add('tpope/vim-sensible')             " use sensible defaults
-    call minpac#add('tpope/vim-sleuth')               " automatically adjust 'shiftwidth' and 'expandtab'
-    call minpac#add('spf13/vim-autoclose')            " close opened parantheses and '\"
-    call minpac#add('andymass/vim-matchup')           " match language specfic words with %
-    call minpac#add('tpope/vim-repeat')               " make repetition work well with plugins
-    call minpac#add('chrisbra/matchit')               " advanced matching
-    call minpac#add('tpope/vim-surround')             " handle surroundings
-    call minpac#add('tpope/vim-speeddating')          " use <c-a>/<c-x> on dates
-    call minpac#add('junegunn/fzf.vim')               " use fzf for file management
-    call minpac#add('catppuccin/vim')                 " catppuccin colorscheme
-    call minpac#add('vimpostor/vim-lumen')            " automatic background color.
-    call minpac#add('vim-airline/vim-airline-themes') " missing themes?
-    if executable('ctags')                            " use tagbar if ctags is available
+    " Supplemental plugins (not in /usr/share/vim/vimfiles)
+    call minpac#add('tpope/vim-sensible')
+    call minpac#add('tpope/vim-sleuth')
+    call minpac#add('spf13/vim-autoclose')
+    call minpac#add('andymass/vim-matchup')
+    call minpac#add('tpope/vim-repeat')
+    call minpac#add('tpope/vim-surround')
+    call minpac#add('tpope/vim-speeddating')
+    call minpac#add('catppuccin/vim', {'as': 'catppuccin'})
+    call minpac#add('vimpostor/vim-lumen')
+    
+    if executable('ctags')
         call minpac#add('majutsushi/tagbar')
     endif
 endfunction
 
-command! PackUpdate source $MYVIMRC | call PackInit() | call minpac#update()
-command! PackClean  source $MYVIMRC | call PackInit() | call minpac#clean()
+command! PackUpdate call PackInit() | call minpac#update()
+command! PackClean  call PackInit() | call minpac#clean()
 command! PackStatus packadd minpac | call minpac#status()
 
-" Persistent Undo (Directory creation)
-if !isdirectory(glob('~/.vim/undodir'))
-    call mkdir($HOME."/.vim/undodir","p")
-endif
-set undodir=~/.vim/undodir
-
-" Vim-specific info file
-set viminfofile=~/.vim/viminfo " Store info under ~/.vim
-
-" Make tags placed in .git/tags file available in all levels of a repository
-let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
-if gitroot != ''
-    let &tags = &tags . ',' . gitroot . '/.git/tags'
-endif
-
-if has('gui_running')
-    set linespace=1
-endif
-
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme='catppuccin_mocha'
-let g:airline_left_sep = '' 
-let g:airline_right_sep = ''
-if !exists('g:airline_symbols')
-      let g:airline_symbols = {}
-endif
-let g:lumen_light_colorscheme='catppuccin_latte'
-let g:lumen_dark_colorscheme='catppuccin_frappe'
-
-" Basic latex setup
+" --- Other Settings ---
 let g:Tex_DefaultTargetFormat='pdf'
 let g:Tex_CompileRule_pdf='latexmk -pdf $*'
+
+let gitroot = substitute(system('git rev-parse --show-toplevel'), '[\n\r]', '', 'g')
+if gitroot != '' | let &tags = &tags . ',' . gitroot . '/.git/tags' | endif
 
 nnoremap <leader>p :GFiles<CR>
