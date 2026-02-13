@@ -181,7 +181,6 @@ source /usr/share/fzf/shell/key-bindings.zsh
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
 zstyle ':fzf-tab:*' popup-min-size 70 25
 zstyle ':fzf-tab:*' popup-pad 30 0
-zstyle ':fzf-tab:*' default-color $'\033[38m'
 
 # Show systemd unit status
 zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'

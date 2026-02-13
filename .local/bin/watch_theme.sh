@@ -51,11 +51,11 @@ update_gemini_config() {
 
     local tmp_file
     tmp_file=$(mktemp)
-    trap 'rm -f "$tmp_file"' RETURN
 
     if jq --arg theme "$gemini_theme" '.ui.theme = $theme' "$GEMINI_CONFIG" > "$tmp_file"; then
         cat "$tmp_file" > "$GEMINI_CONFIG"
     fi
+    rm -f "$tmp_file"
 }
 
 update_bat_config() {
@@ -92,6 +92,7 @@ export LS_COLORS="$ls_colors"
 export FZF_DEFAULT_OPTS="\${FZF_BASE_OPTS} $fzf_colors"
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="$autosuggest"
 export FZF_CTRL_T_OPTS="\${FZF_DEFAULT_OPTS} --preview 'pistol {}' --header 'E to edit' --bind 'E:execute(vim {})'"
+zstyle ':fzf-tab:*' fzf-flags $fzf_colors
 EOF
 }
 
