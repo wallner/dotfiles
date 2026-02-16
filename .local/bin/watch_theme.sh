@@ -6,7 +6,6 @@ BASE_DIR="$HOME/.local/bin"
 THEMES_DEF="$BASE_DIR/themes.sh"
 GET_THEME_SCRIPT="$BASE_DIR/get_theme.sh"
 GEMINI_CONFIG="$HOME/.gemini/settings.json"
-BAT_CONFIG="$HOME/.config/bat/config"
 ZSH_THEME_FILE="$HOME/.local/state/zsh/theme_colors.zsh"
 VIVID_BIN="$HOME/.local/bin/vivid"
 
@@ -58,27 +57,21 @@ update_gemini_config() {
     rm -f "$tmp_file"
 }
 
-update_bat_config() {
-    local theme_mode="$1"
-    local bat_theme
-    mkdir -p "$(dirname "$BAT_CONFIG")"
-    [[ "$theme_mode" == "light" ]] && bat_theme="$BAT_THEME_LIGHT" || bat_theme="$BAT_THEME_DARK"
-    echo "--theme=\"$bat_theme\"" > "$BAT_CONFIG"
-}
-
 update_zsh_theme() {
     local theme_mode="$1"
-    local fzf_colors autosuggest ls_colors vivid_theme
+    local fzf_colors autosuggest ls_colors vivid_theme bat_theme
     mkdir -p "$(dirname "$ZSH_THEME_FILE")"
 
     if [[ "$theme_mode" == "light" ]]; then
         fzf_colors="$ZSH_FZF_COLORS_LIGHT"
         autosuggest="$ZSH_AUTOSUGGEST_LIGHT"
         vivid_theme="$VIVID_THEME_LIGHT"
+        bat_theme="$BAT_THEME_LIGHT"
     else
         fzf_colors="$ZSH_FZF_COLORS_DARK"
         autosuggest="$ZSH_AUTOSUGGEST_DARK"
         vivid_theme="$VIVID_THEME_DARK"
+        bat_theme="$BAT_THEME_DARK"
     fi
 
     # Write fzf colors to XDG compliant location
@@ -95,6 +88,7 @@ update_zsh_theme() {
 export LS_COLORS="$ls_colors"
 export FZF_DEFAULT_OPTS="\${FZF_BASE_OPTS} $fzf_colors"
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="$autosuggest"
+export BAT_THEME="$bat_theme"
 export FZF_CTRL_T_OPTS="\${FZF_DEFAULT_OPTS} --preview 'pistol {}' --header 'E to edit' --bind 'E:execute(vim {})'"
 zstyle ':fzf-tab:*' fzf-flags $fzf_colors
 EOF
@@ -103,7 +97,6 @@ EOF
 sync_themes() {
     local mode="$1"
     update_gemini_config "$mode"
-    update_bat_config "$mode"
     update_zsh_theme "$mode"
     # Signal running zsh instances to reload theme
     pkill -USR1 -u "$(id -u)" zsh 2>/dev/null || true
