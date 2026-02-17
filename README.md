@@ -35,7 +35,7 @@ A particular highlight of this setup is the automatic, real-time adaptation to s
 ### 📂 Modern XDG Structure
 Configurations are strictly separated to keep the home directory uncluttered and portable:
 - **Configuration:** `~/.config/` (Vim, Zsh, Git, Tmux, Ghostty, Fzf)
-- **Data:** `~/.local/share/` (Vim plugins, [Antidote](https://getantidote.github.io/))
+- **Data:** `~/.local/share/` (Vim plugins, [Sheldon](https://sheldon.cli.rs/))
 - **State:** `~/.local/state/` (Zsh history, Vim undo/info, theme synchronization state)
 
 ### ⌨️ Consolidated Vim Experience
@@ -47,7 +47,7 @@ A shared foundation for Vim, Neovim, and IdeaVim ensures a consistent workflow a
 
 ## Dependencies
 
-- **Shell:** [Zsh](https://www.zsh.org/), [Antidote](https://getantidote.github.io/), [zoxide](https://github.com/ajeetdsouza/zoxide), [Starship](https://starship.rs/), [direnv](https://direnv.net/), [fzf-tab](https://github.com/Aloxaf/fzf-tab)
+- **Shell:** [Zsh](https://www.zsh.org/), [Sheldon](https://sheldon.cli.rs/), [zoxide](https://github.com/ajeetdsouza/zoxide), [Starship](https://starship.rs/), [direnv](https://direnv.net/), [fzf-tab](https://github.com/Aloxaf/fzf-tab)
 - **CLI Tools:** [fzf](https://github.com/junegunn/fzf), [bat](https://github.com/sharkdp/bat), [eza](https://github.com/eza-community/eza), [fd](https://github.com/sharkdp/fd), [vivid](https://github.com/sharkdp/vivid), [jq](https://github.com/jqlang/jq)
 - **Editors:** [Vim](https://www.vim.org/), [Neovim](https://neovim.io/), [Universal Ctags](https://ctags.io/)
 

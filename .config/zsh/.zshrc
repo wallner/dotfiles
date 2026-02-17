@@ -94,15 +94,10 @@ fpath=(${ZDOTDIR:-$HOME/.config/zsh}/completion $fpath)
 autoload -Uz compinit && compinit -i
 autoload -U +X bashcompinit && bashcompinit
 
-# initialize antidote
-antidote_path=${XDG_DATA_HOME:-$HOME/.local/share}/zsh/antidote
-if [ ! -d $antidote_path ]; then
-    git clone --depth=1 https://github.com/mattmc3/antidote.git $antidote_path
+# initialize sheldon plugin manager
+if (( $+commands[sheldon] )); then
+    eval "$(sheldon source)"
 fi
-source $antidote_path/antidote.zsh
-zstyle ':antidote:bundle' file ${ZDOTDIR:-$HOME/.config/zsh}/plugins.txt
-zstyle ':antidote:static' file ${XDG_CACHE_HOME:-$HOME/.cache}/zsh/plugins.zsh
-antidote load
 
 # Completion caching
 zstyle ':completion::complete:*' use-cache 1

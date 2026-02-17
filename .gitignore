@@ -1,2 +1,4 @@
-.local/share/zsh/antidote/
-.cache/zsh/plugins.zsh
+.cache/
+.DS_Store
+*~
+*.swp
