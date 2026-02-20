@@ -45,6 +45,13 @@ A shared foundation for Vim, Neovim, and IdeaVim ensures a consistent workflow a
 - **Neovim:** Modern ecosystem management via [lazy.nvim](https://github.com/folke/lazy.nvim).
 - **IdeaVim:** Seamlessly sources the common configuration within IntelliJ IDEA.
 
+### 🏗 Flatpak Breakout Integration
+For development tools running inside Flatpak containers (like IntelliJ IDEA), a universal breakout mechanism is provided:
+- **Universal Bridge:** `~/.local/bin/flatpak-host-bridge.sh` uses `host-spawn` to execute commands on the host system.
+- **Transparent Shims:** Symlinks (e.g., `python`, `uv`, `podman`) point to this bridge, allowing sandboxed IDEs to use host-resident tools seamlessly.
+- **Native Sockets:** Includes Flatpak overrides to mount the Podman/Docker socket directly into the container for native integration.
+- **Security Note:** This mechanism is a deliberate trade-off, reducing Flatpak's sandbox isolation to enable a more flexible development workflow by allowing containerized applications to interact with host system resources.
+
 ## Dependencies
 
 - **Shell:** [Zsh](https://www.zsh.org/), [Sheldon](https://sheldon.cli.rs/), [zoxide](https://github.com/ajeetdsouza/zoxide), [Starship](https://starship.rs/), [direnv](https://direnv.net/), [fzf-tab](https://github.com/Aloxaf/fzf-tab)

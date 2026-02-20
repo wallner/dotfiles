@@ -1,10 +1,14 @@
 [Context]
-filesystems=host-os
+filesystems=host-os;~/.local/bin:ro;/run/user/1000/podman/podman.sock
+sockets=x11;wayland;fallback-x11
 
 [Environment]
 FLATPAK_ENABLE_SDK_EXT=golang,node22,node20,openjdk,openjdk21,openjdk17,rust-stable,typescript
 DOCKER_HOST=unix:///run/user/1000/podman/podman.sock
+# Point directly to our symlinks
 DOCKER_BIN=/home/wallner/.local/bin/docker
+# Ensure our local shims are preferred
+PATH=/home/wallner/.local/bin:/usr/bin:/bin
 
 [Session Bus Policy]
 org.freedesktop.Flatpak=talk
