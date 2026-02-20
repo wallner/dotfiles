@@ -210,8 +210,8 @@ zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
     *) git log --color=always $word ;;
     esac'
 
-# preview for directories
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'pistol ${(Q)realpath}'
+# preview for directories and files
+zstyle ':fzf-tab:complete:*:*' fzf-preview 'pistol ${(Q)realpath}'
 
 if (( $+commands[terraform] )); then
     complete -o nospace -C $(which terraform) terraform
