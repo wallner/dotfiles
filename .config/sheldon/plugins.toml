@@ -1,0 +1,24 @@
+shell = "zsh"
+
+[plugins.zsh-syntax-highlighting]
+github = "zsh-users/zsh-syntax-highlighting"
+
+[plugins.zsh-autosuggestions]
+github = "zsh-users/zsh-autosuggestions"
+
+[plugins.fzf-tab]
+github = "Aloxaf/fzf-tab"
+
+[plugins.fzf-git]
+github = "junegunn/fzf-git.sh"
+use = ["fzf-git.sh"]
+
+[plugins.fzf-finder]
+github = "leophys/zsh-plugin-fzf-finder"
+
+[plugins.blackbox]
+github = "StackExchange/blackbox"
+
+[plugins.aws]
+github = "ohmyzsh/ohmyzsh"
+dir = "plugins/aws"
