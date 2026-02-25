@@ -31,14 +31,16 @@ bindkey "\e[3~" delete-char # make delete work correctly
 setopt ALWAYS_TO_END        # Move to end of word after completion
 setopt AUTO_CD              # If an unknown command is a directory cd into it.
 setopt BRACE_CCL            # Expand expressions in braces
-setopt COMPLETE_IN_WORD     # Don't move to end of word when completeing.
+setopt COMPLETE_IN_WORD     # Don't move to end of word when completing.
 setopt CORRECT              # Try auto correction of commands
 setopt EQUALS               # Filename expansion on right hand side of '='
+setopt HIST_EXPIRE_DUPS_FIRST # Expire duplicate entries first when trimming history
+setopt HIST_FIND_NO_DUPS    # Don't display a line previously found
 setopt HIST_IGNORE_ALL_DUPS # Remove all duplicates from the history
-setopt HIST_IGNORE_DUPS     # Ignore duplicates of direct predecessor
 setopt HIST_IGNORE_SPACE    # Remove command from history if it starts with a space
 setopt HIST_NO_STORE        # Don't store history in the history
 setopt HIST_REDUCE_BLANKS   # Remove all superflous blanks from history entries
+setopt HIST_SAVE_NO_DUPS    # Don't write duplicate entries in the history file
 setopt SHARE_HISTORY        # History is shared between shells.
 setopt LONG_LIST_JOBS       # Display jobs in long list formats
 setopt MARK_DIRS            # Mark a generated filename as directory '/'
@@ -55,7 +57,7 @@ export MANWIDTH=80
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export MANROFFOPT="-c"
 
-# In the process of switching to bat, but for the time beiing...
+# In the process of switching to bat, but for the time being...
 if [ -f /usr/share/source-highlight/src-hilite-lesspipe.sh ]; then
     LESSOPEN="| /usr/bin/src-hilite-lesspipe.sh %s"
 fi
@@ -85,87 +87,36 @@ alias doch='sudo $(fc -ln -1)'
 alias cat='bat -p'
 alias xps='ps aucx | head -1; ps aucx | grep -i '
 alias https='http --default-scheme=https'
-alias xc='xclip -i -selection clipboard'
-alias vim='vimx'
-
-# Completion control
-fpath=(${ZDOTDIR:-$HOME/.config/zsh}/completion $fpath)
-
-autoload -Uz compinit && compinit -i
-autoload -U +X bashcompinit && bashcompinit
-
-# initialize antidote
-antidote_path=${XDG_DATA_HOME:-$HOME/.local/share}/zsh/antidote
-if [ ! -d $antidote_path ]; then
-    git clone --depth=1 https://github.com/mattmc3/antidote.git $antidote_path
+alias xc='wl-copy'
+if (( $+commands[vimx] )); then
+    alias vim='vimx'
 fi
-source $antidote_path/antidote.zsh
-zstyle ':antidote:bundle' file ${ZDOTDIR:-$HOME/.config/zsh}/plugins.txt
-zstyle ':antidote:static' file ${XDG_CACHE_HOME:-$HOME/.cache}/zsh/plugins.zsh
-antidote load
 
-# Completion caching
-zstyle ':completion::complete:*' use-cache 1
-zstyle ':completion::complete:*' cache-path ${XDG_CACHE_HOME:-$HOME/.cache}/zsh/cache/$HOST
+# 1. Completion control & init
+fpath=(${ZDOTDIR:-$HOME/.config/zsh}/completion $fpath)
+autoload -Uz compinit && compinit -i
+if (( $+commands[terraform] )) || (( $+commands[tofu] )); then
+    autoload -U +X bashcompinit && bashcompinit
+fi
 
-# formatting and messages
-zstyle ':completion:*' verbose yes
-zstyle ':completion:*:descriptions' format '[%d]'
-zstyle ':completion:*:messages' format '%d'
-zstyle ':completion:*:warnings' format 'No matches for: %d'
-zstyle ':completion:*:corrections' format '%B%d (errors: %e)%b'
-zstyle ':completion:*' group-name ''
+# 2. initialize sheldon plugin manager (loads fzf-tab)
+if (( $+commands[sheldon] )); then
+    eval "$(sheldon source)"
+fi
 
-# set list-colors to enable filename colorizing
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-
-# match uppercase from lowercase
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-
-# force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
-zstyle ':completion:*' menu no
-
-# offer indexes before parameters in subscripts
-zstyle ':completion:*:*:-subscript-:*' tag-order indexes parameters
-
-# Don't complete backup files as executables
-zstyle ':completion:*:complete:-command-::commands' ignored-patterns '*\~'
-
-# Separate matches into groups
-zstyle ':completion:*:matches' group 'yes'
-
-# Describe options in full
-zstyle ':completion:*:options' description 'yes'
-zstyle ':completion:*:options' auto-description '%d'
-
-# Searchable display strings
-zstyle ':completion:*' fzf-search-display true
-# disable sort when completing 'git checkout'
-zstyle ':completion:*:git-checkout:*' sort false
-# set descriptions format to enable group support
-zstyle ':completion:*:descriptions' format '[%d]'
-# give a preview of commandline arguments when completing `kill`
-zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
-# preview when completing env vars (note: only works for exported variables)
-# eval twice, first to unescape the string, second to expand the $variable
-zstyle ':completion::*:(-command-|-parameter-|-brace-parameter-|export|unset|expand):*' fzf-completion-opts --preview='eval eval echo {1}'
-# preview a `git status` when completing git add
-zstyle ':completion::*:git::git,add,*' fzf-completion-opts --preview='git -c color.status=always status --short'
-
-# FZF Configuration
+# 3. FZF Configuration (Base options MUST be set before theme)
 export FZF_TMUX=1
 export FZF_TMUX_OPTS="-p80%,60%"
 export FZF_BASE_OPTS="--layout=reverse-list --no-separator --border=rounded \
                          --info=inline -m --prompt='▶' --pointer='→' \
                          --marker='♡ '"
-export FZF_DEFAULT_OPTS="${FZF_BASE_OPTS}"
 export FZF_DEFAULT_OPTS_FILE="$HOME/.config/fzf/colors"
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --ignore-file "$HOME/.gitexcludes" \
                                --exclude .git --strip-cwd-prefix'
 export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}
 export FZF_COMPLETION_OPTS='--border --info=inline'
 
-# Load initial theme colors
+# 4. Load theme colors (Appends colors to FZF_DEFAULT_OPTS and sets zstyles)
 theme_file=${XDG_STATE_HOME:-$HOME/.local/state}/zsh/theme_colors.zsh
 [[ -f "$theme_file" ]] && source "$theme_file"
 
@@ -174,57 +125,10 @@ TRAPUSR1() {
     [[ -f "$theme_file" ]] && source "$theme_file"
 }
 
-source /usr/share/fzf/shell/key-bindings.zsh
+# 5. Load completion styles (MUST come after fzf-tab and theme)
+[[ -f ${ZDOTDIR:-$HOME/.config/zsh}/completion.zsh ]] && source ${ZDOTDIR:-$HOME/.config/zsh}/completion.zsh
 
-
-# use the tmux popup
-zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
-zstyle ':fzf-tab:*' popup-min-size 70 25
-zstyle ':fzf-tab:*' popup-pad 30 0
-
-# Show systemd unit status
-zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'
-
-# give a preview of commandline arguments when completing `kill`
-zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
-zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview \
-'[[ $group == "[process ID]" ]] && ps --pid=$word -o cmd --no-headers -w -w'
-zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-flags --preview-window=down:3:wrap
-
-# environment variable
-zstyle ':fzf-tab:complete:(-command-|-parameter-|-brace-parameter-|export|unset|expand):*' \
-    fzf-preview 'echo ${(P)word}'
-
-
-# preview for git commands
-zstyle ':fzf-tab:complete:git-(add|diff|restore):*' fzf-preview \
-    'git diff $word | delta'
-zstyle ':fzf-tab:complete:git-log:*' fzf-preview \
-    'git log --color=always $word'
-zstyle ':fzf-tab:complete:git-help:*' fzf-preview \
-    'git help $word | bat -plman --color=always'
-zstyle ':fzf-tab:complete:git-show:*' fzf-preview \
-    'case "$group" in
-    "commit tag") git show --color=always $word ;;
-    *) git show --color=always $word | delta ;;
-    esac'
-zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
-    'case "$group" in
-    "modified file") git diff $word | delta ;;
-    "recent commit object name") git show --color=always $word | delta ;;
-    *) git log --color=always $word ;;
-    esac'
-
-# preview for directories
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'pistol ${(Q)realpath}'
-
-if (( $+commands[terraform] )); then
-    complete -o nospace -C $(which terraform) terraform
-fi
-
-if (( $+commands[tofu] )); then
-    complete -o nospace -C $(which tofu) tofu
-fi
+[[ -f /usr/share/fzf/shell/key-bindings.zsh ]] && source /usr/share/fzf/shell/key-bindings.zsh
 
 if (( $+commands[kubectl] )); then
     source <(kubectl completion zsh)
@@ -261,11 +165,10 @@ for gcloud_completion in \
     fi
 done
 
-eval "$(direnv hook zsh)"
+if (( $+commands[direnv] )); then
+    eval "$(direnv hook zsh)"
+fi
 
-# Removing duplicate entries from $PATH
-typeset -U PATH
-
+# 6. Starship Configuration (Using dynamic config in state directory)
+export STARSHIP_CONFIG="$HOME/.local/state/starship/config.toml"
 eval "$(starship init zsh)"
-
-
