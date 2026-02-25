@@ -2,14 +2,29 @@
 Description=Watch for Desktop Theme Changes
 
 [Service]
-ExecStart=%h/.local/bin/watch_theme.sh
+# Ensure the service finds tools in ~/.local/bin (like vivid)
+Environment="PATH=/home/wallner/.local/bin:/usr/local/bin:/usr/bin:/bin"
+# Ensure the service can talk to the session bus
+Environment="DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/%U/bus"
+
+ExecStart=/home/wallner/.local/bin/watch_theme.sh
 Restart=on-failure
 RestartSec=5
+
+# Provide a writable scratch directory at /run/user/<uid>/theme-watcher
+# so mktemp works under ProtectSystem=strict (which makes /tmp read-only)
+RuntimeDirectory=theme-watcher
+Environment="TMPDIR=/run/user/1000/theme-watcher"
+
+# Security hardening
 ProtectSystem=strict
 ProtectHome=read-only
-ReadWritePaths=%h/.config/bat %h/.config/fzf %h/.local/state/zsh %h/.gemini
+
+# We allow writing to config, state and the repo to support symlinks and self-healing.
+# /tmp/tmux-1000 is included so the service can reach the tmux Unix socket.
+ReadWritePaths=%h/.config %h/.local/state %h/.local/share %h/.gemini %h/depot/dotfiles /tmp/tmux-1000
+
 NoNewPrivileges=true
-PrivateTmp=true
 
 [Install]
 WantedBy=default.target

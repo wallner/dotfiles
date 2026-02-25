@@ -44,3 +44,7 @@
 	helper = !/usr/bin/gh auth git-credential
 [maintenance]
 	repo = ~/depot/dotfiles
+[include]
+	path = ~/.config/git/catppuccin.gitconfig
+[include]
+	path = ~/.local/state/git/delta_theme

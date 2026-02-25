@@ -5,14 +5,26 @@ GEMINI_THEME_DARK="Default"
 GEMINI_THEME_LIGHT="Default Light"
 
 # Bat Themes
-BAT_THEME_DARK="Catppuccin Macchiato"
+BAT_THEME_DARK="Catppuccin Frappe"
 BAT_THEME_LIGHT="Catppuccin Latte"
 
 # Vivid (LS_COLORS) Themes
-VIVID_THEME_DARK="catppuccin-macchiato"
+VIVID_THEME_DARK="catppuccin-frappe"
 VIVID_THEME_LIGHT="catppuccin-latte"
 
-# Zsh / FZF Colors - Dark (Macchiato)
+# Delta Themes
+DELTA_THEME_DARK="catppuccin-frappe"
+DELTA_THEME_LIGHT="catppuccin-latte"
+
+# Starship Palettes
+STARSHIP_PALETTE_DARK="catppuccin_frappe"
+STARSHIP_PALETTE_LIGHT="catppuccin_latte"
+
+# Tmux Flavors (Fixed spelling: flavor instead of flavour)
+TMUX_FLAVOR_DARK="frappe"
+TMUX_FLAVOR_LIGHT="latte"
+
+# Zsh / FZF Colors - Dark (Frappe)
 ZSH_FZF_COLORS_DARK="--color=bg+:#414559,bg:#303446,spinner:#f2d5cf,hl:#e78284 \
 --color=fg:#c6d0f5,header:#e78284,info:#ca9ee6,pointer:#f2d5cf \
 --color=marker:#f2d5cf,fg+:#c6d0f5,prompt:#ca9ee6,hl+:#e78284"

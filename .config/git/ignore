@@ -17,3 +17,5 @@ target/
 # Package Files #
 *.war
 *.ear
+
+**/.claude/settings.local.json
