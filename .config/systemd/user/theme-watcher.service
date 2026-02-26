@@ -14,15 +14,15 @@ RestartSec=5
 # Provide a writable scratch directory at /run/user/<uid>/theme-watcher
 # so mktemp works under ProtectSystem=strict (which makes /tmp read-only)
 RuntimeDirectory=theme-watcher
-Environment="TMPDIR=/run/user/1000/theme-watcher"
+Environment="TMPDIR=/run/user/%U/theme-watcher"
 
 # Security hardening
 ProtectSystem=strict
 ProtectHome=read-only
 
 # We allow writing to config, state and the repo to support symlinks and self-healing.
-# /tmp/tmux-1000 is included so the service can reach the tmux Unix socket.
-ReadWritePaths=%h/.config %h/.local/state %h/.local/share %h/.gemini %h/depot/dotfiles /tmp/tmux-1000
+# /tmp/tmux-<uid> is included so the service can reach the tmux Unix socket.
+ReadWritePaths=%h/.config %h/.local/state %h/.local/share %h/.gemini %h/depot/dotfiles /tmp/tmux-%U
 
 NoNewPrivileges=true
 

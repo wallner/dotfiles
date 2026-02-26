@@ -86,7 +86,6 @@ update_delta_theme() {
     [[ "$theme_mode" == "light" ]] && delta_theme="$DELTA_THEME_LIGHT" || delta_theme="$DELTA_THEME_DARK"
 
     log "Updating Delta theme..."
-    mkdir -p "$(dirname "$DELTA_THEME_FILE")"
     cat << EOF > "$DELTA_THEME_FILE"
 [delta]
 	features = $delta_theme
@@ -99,7 +98,6 @@ update_tmux_theme() {
     [[ "$theme_mode" == "light" ]] && tmux_flavor="$TMUX_FLAVOR_LIGHT" || tmux_flavor="$TMUX_FLAVOR_DARK"
 
     log "Updating Tmux theme to $tmux_flavor..."
-    mkdir -p "$(dirname "$TMUX_THEME_FILE")"
     echo "set -g @catppuccin_flavor '$tmux_flavor'" > "$TMUX_THEME_FILE"
 
     # Apply to any running tmux server
@@ -123,20 +121,16 @@ update_starship_theme() {
     [[ "$theme_mode" == "light" ]] && starship_palette="$STARSHIP_PALETTE_LIGHT" || starship_palette="$STARSHIP_PALETTE_DARK"
 
     log "Updating Starship theme..."
-    mkdir -p "$(dirname "$STARSHIP_THEME_FILE")"
     local tmp_file
     tmp_file=$(mktemp)
     echo "palette = \"$starship_palette\"" > "$tmp_file"
     [[ -f "$STARSHIP_BASE_CONFIG" ]] && cat "$STARSHIP_BASE_CONFIG" >> "$tmp_file"
-    # Use cat to preserve potential symlinks if needed
-    cat "$tmp_file" > "$STARSHIP_THEME_FILE"
-    rm -f "$tmp_file"
+    mv "$tmp_file" "$STARSHIP_THEME_FILE"
 }
 
 update_zsh_theme() {
     local theme_mode="$1"
     local fzf_colors autosuggest ls_colors vivid_theme bat_theme
-    mkdir -p "$(dirname "$ZSH_THEME_FILE")"
 
     if [[ "$theme_mode" == "light" ]]; then
         fzf_colors="$ZSH_FZF_COLORS_LIGHT"
@@ -151,8 +145,6 @@ update_zsh_theme() {
     fi
 
     log "Updating Zsh theme..."
-    # Write fzf colors to XDG compliant location
-    mkdir -p "$HOME/.config/fzf"
     echo "$fzf_colors" > "$HOME/.config/fzf/colors"
 
     # Generate LS_COLORS using vivid
@@ -174,7 +166,6 @@ EOF
 sync_themes() {
     local mode="$1"
     log "Synchronizing themes to $mode mode..."
-    check_dependencies
     update_gemini_config "$mode"
     update_delta_theme "$mode"
     update_tmux_theme "$mode"
@@ -187,6 +178,7 @@ sync_themes() {
 }
 
 # --- Main ---
+check_dependencies
 LAST_THEME=$(get_current_mode)
 sync_themes "$LAST_THEME"
 
