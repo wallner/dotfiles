@@ -70,8 +70,12 @@ update_gemini_config() {
     tmp_file=$(mktemp)
 
     log "Updating Gemini config..."
-    if jq --arg theme "$gemini_theme" '.ui.theme = $theme' "$GEMINI_CONFIG" > "$tmp_file"; then
-        mv "$tmp_file" "$GEMINI_CONFIG"
+    # Robust update: only apply if jq succeeds and output is not empty
+    if jq --arg theme "$gemini_theme" '.ui.theme = $theme' "$GEMINI_CONFIG" > "$tmp_file" && [ -s "$tmp_file" ]; then
+        # Use cat to preserve the Stow symlink!
+        cat "$tmp_file" > "$GEMINI_CONFIG"
+    else
+        log "Error: Failed to update Gemini config (invalid JSON or empty result). Preserving old config."
     fi
     rm -f "$tmp_file"
 }
@@ -103,10 +107,7 @@ update_tmux_theme() {
         # 1. Update the flavor option
         tmux set-option -g @catppuccin_flavor "$tmux_flavor"
         # 2. Unset all options holding cached hex color values so the new theme
-        #    can re-set them. catppuccin uses -ogq/-ogqF ("only if not set")
-        #    for both @thm_* palette vars and @catppuccin_*_color / status fg/bg
-        #    module vars. Options whose value contains a #rrggbb hex code are the
-        #    ones that need clearing.
+        #    can re-set them.
         tmux show-options -g | awk '/#[0-9a-fA-F]{6}/{print $1}' | while read -r var; do
             tmux set-option -gu "$var"
         done
@@ -127,7 +128,9 @@ update_starship_theme() {
     tmp_file=$(mktemp)
     echo "palette = \"$starship_palette\"" > "$tmp_file"
     [[ -f "$STARSHIP_BASE_CONFIG" ]] && cat "$STARSHIP_BASE_CONFIG" >> "$tmp_file"
-    mv "$tmp_file" "$STARSHIP_THEME_FILE"
+    # Use cat to preserve potential symlinks if needed
+    cat "$tmp_file" > "$STARSHIP_THEME_FILE"
+    rm -f "$tmp_file"
 }
 
 update_zsh_theme() {

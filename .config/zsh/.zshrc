@@ -92,6 +92,8 @@ if (( $+commands[vimx] )); then
     alias vim='vimx'
 fi
 
+# --- LOADING ARCHITECTURE (Critical Order) ---
+
 # 1. Completion control & init
 fpath=(${ZDOTDIR:-$HOME/.config/zsh}/completion $fpath)
 autoload -Uz compinit && compinit -i
@@ -99,12 +101,13 @@ if (( $+commands[terraform] )) || (( $+commands[tofu] )); then
     autoload -U +X bashcompinit && bashcompinit
 fi
 
-# 2. initialize sheldon plugin manager (loads fzf-tab)
+# 2. Initialize sheldon plugin manager (loads fzf-tab)
+# Must be loaded before completion styles are applied
 if (( $+commands[sheldon] )); then
     eval "$(sheldon source)"
 fi
 
-# 3. FZF Configuration (Base options MUST be set before theme)
+# 3. FZF Configuration (Base options MUST be set before dynamic theme)
 export FZF_TMUX=1
 export FZF_TMUX_OPTS="-p80%,60%"
 export FZF_BASE_OPTS="--layout=reverse-list --no-separator --border=rounded \
@@ -116,7 +119,8 @@ export FZF_DEFAULT_COMMAND='fd --type f --hidden --ignore-file "$HOME/.gitexclud
 export FZF_CTRL_T_COMMAND=${FZF_DEFAULT_COMMAND}
 export FZF_COMPLETION_OPTS='--border --info=inline'
 
-# 4. Load theme colors (Appends colors to FZF_DEFAULT_OPTS and sets zstyles)
+# 4. Load dynamic theme colors (Appends colors to FZF_DEFAULT_OPTS and sets zstyles)
+# Managed by watch_theme.sh
 theme_file=${XDG_STATE_HOME:-$HOME/.local/state}/zsh/theme_colors.zsh
 [[ -f "$theme_file" ]] && source "$theme_file"
 
@@ -125,8 +129,10 @@ TRAPUSR1() {
     [[ -f "$theme_file" ]] && source "$theme_file"
 }
 
-# 5. Load completion styles (MUST come after fzf-tab and theme)
+# 5. Load completion styles (Modularized - MUST come after fzf-tab and theme)
 [[ -f ${ZDOTDIR:-$HOME/.config/zsh}/completion.zsh ]] && source ${ZDOTDIR:-$HOME/.config/zsh}/completion.zsh
+
+# --- Post-Loading Configurations ---
 
 [[ -f /usr/share/fzf/shell/key-bindings.zsh ]] && source /usr/share/fzf/shell/key-bindings.zsh
 
@@ -168,6 +174,9 @@ done
 if (( $+commands[direnv] )); then
     eval "$(direnv hook zsh)"
 fi
+
+# Removing duplicate entries from $PATH
+typeset -U PATH
 
 # 6. Starship Configuration (Using dynamic config in state directory)
 export STARSHIP_CONFIG="$HOME/.local/state/starship/config.toml"
