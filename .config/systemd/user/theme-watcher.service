@@ -20,9 +20,9 @@ Environment="TMPDIR=/run/user/%U/theme-watcher"
 ProtectSystem=strict
 ProtectHome=read-only
 
-# We allow writing to config, state and the repo to support symlinks and self-healing.
+# We allow writing to specific state and config directories for self-healing and theme propagation.
 # /tmp/tmux-<uid> is included so the service can reach the tmux Unix socket.
-ReadWritePaths=%h/.config %h/.local/state %h/.local/share %h/.gemini %h/depot/dotfiles /tmp/tmux-%U
+ReadWritePaths=%h/.local/state/zsh %h/.local/state/git %h/.local/state/tmux %h/.local/state/starship %h/.config/fzf %h/.gemini /tmp/tmux-%U
 
 NoNewPrivileges=true
 
